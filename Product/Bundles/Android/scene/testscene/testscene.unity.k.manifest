@@ -1,0 +1,14 @@
+ManifestFileVersion: 0
+CRC: 1850086427
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 4b7400afcf9449ac174877de0d78e42d
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 31d6cfe0d16ae931b73c59d7e0c089c0
+HashAppended: 0
+ClassTypes: []
+Assets:
+- Assets/BundleResources/Scene/TestScene/TestScene.unity
+Dependencies: []
