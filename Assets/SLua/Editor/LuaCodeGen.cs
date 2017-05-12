@@ -659,6 +659,8 @@ namespace SLua
 			"MonoBehaviour.runInEditMode",
 			"MonoBehaviour.useGUILayout",
 			"PlayableGraph.CreateScriptPlayable",
+            //TODO:这里是接口屏蔽
+            "WWWAudioExtensions.GetMovieTexture",
         };
 
 

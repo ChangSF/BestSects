@@ -133,7 +133,7 @@ namespace SLua
                 "jvalue",
                 "iPhone",
                 "iOS",
-                //"Windows",
+                "Windows",
                 "CalendarIdentifier",
                 "CalendarUnit",
                 "CalendarUnit",
@@ -176,8 +176,12 @@ namespace SLua
 			    "EventProvider",
 			    "Apple",
 			    "ClusterInput",
-				//"Motion",
-                //"UnityEngine.UI.ReflectionMethodsCache",
+				"Motion",
+                //TODO:这里是命名空间屏蔽
+                "UnityEngine.UI.ReflectionMethodsCache",
+                "UnityEngine.Light",
+                "UnityEngine.Collections",
+
             };
         }
     }

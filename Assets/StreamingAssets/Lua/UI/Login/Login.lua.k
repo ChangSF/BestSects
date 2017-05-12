@@ -47,7 +47,7 @@ function UILogin:OnInit(controller)
         btn.onClick:AddListener(function()
             print('Click the button!!!')
             UIModule.Instance:CloseWindow("Login")
-            UIModule.Instance:OpenWindow("WND_Introduce","user1")
+            UIModule.Instance:OpenWindow("UI_Introduce","user1")
         end)
         print('Success bind button OnClick!')
     else
