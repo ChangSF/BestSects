@@ -1,9 +1,11 @@
 fileFormatVersion: 2
 guid: 60181c4b58da1124cad7b2410e29d34e
-timeCreated: 1493398569
+timeCreated: 1494586228
 licenseType: Pro
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: budeliao_0
+    21300002: budeliao_1
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -92,7 +94,33 @@ TextureImporter:
     overridden: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: budeliao_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 323
+        width: 531
+        height: 345
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: budeliao_1
+      rect:
+        serializedVersion: 2
+        x: 531
+        y: 326
+        width: 546
+        height: 338
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
     outline: []
   spritePackingTag: 
   userData: 
