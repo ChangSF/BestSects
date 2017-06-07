@@ -1,0 +1,30 @@
+﻿syntax = "proto3";
+option java_package = "com.leader.login.protobuf.protocol"; 
+option csharp_namespace = "BestSects.protocol";
+option java_outer_classname = "LoginProtocol";
+
+
+
+// 玩家登录请求
+message ReqUserLoginMessage{
+		string username = 1;
+		string password = 2;
+}
+
+// 玩家登录响应
+message ResUserLoginMessage{
+		string data = 1;
+}
+
+// 玩家注册请求
+message ReqUserRegisterMessage{
+		string username = 1;
+		string password = 2;
+}
+
+// 玩家注册响应
+message ResUserRegisterMessage{
+		string data = 1;
+}
+
+

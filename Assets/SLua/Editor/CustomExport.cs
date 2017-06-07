@@ -57,6 +57,7 @@ namespace SLua
             // add( type, typename)
             // type is what you want to export
             // typename used for simplify generic type name or rename, like List<int> named to "ListInt", if not a generic type keep typename as null or rename as new type name
+            add(typeof(Lua2csMessenger), "Lua2csMessenger");
         }
 
         public static void OnAddCustomAssembly(ref List<string> list)

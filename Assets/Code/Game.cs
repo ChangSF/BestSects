@@ -76,10 +76,10 @@ public class Game : KSGame
         yield return null;
 
         Log.Info("======================================= Open Window 'Login' =================================");
-        UIModule.Instance.OpenWindow("Login", 888);
+        UIModule.Instance.OpenWindow("WND_GameStart", 888);
 
         // Test Load a scene in asset bundle
-        SceneLoader.Load("Scene/TestScene/TestScene.unity");
+        //SceneLoader.Load("Scene/TestScene/TestScene.unity");
 
         // 开始加载我们的公告界面！
         //UIModule.Instance.OpenWindow("Billboard");
