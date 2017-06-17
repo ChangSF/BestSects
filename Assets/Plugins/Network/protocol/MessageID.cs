@@ -7,13 +7,13 @@ using BestSects.protocol;
 
 namespace BestSects.Net
 {
-    public enum MessageID
+    public enum MessageID : short
     {
-        ReqUserLogin = 1100,
-        ReqUserRegister = 1101,
+        ReqUserLogin = 110,
+        ReqUserRegister = 111,
 
-        ResUserLogin = 2100,
-        ResUserRegister = 2101,
+        ResUserLogin = 210,
+        ResUserRegister = 211,
     }
 
     public class MessageMap

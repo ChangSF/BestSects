@@ -13,7 +13,8 @@ message ReqUserLoginMessage{
 
 // 玩家登录响应
 message ResUserLoginMessage{
-		string data = 1;
+		int32 code=1;
+		string data = 2;
 }
 
 // 玩家注册请求
@@ -26,5 +27,3 @@ message ReqUserRegisterMessage{
 message ResUserRegisterMessage{
 		string data = 1;
 }
-
-

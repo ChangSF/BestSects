@@ -12,6 +12,7 @@ using BestSects.protocol;
 public class TestNetwork : MonoBehaviour, ISocketListener
 {
     public Button btnConnect;
+    public Button btnSend;
     public Text ConnectResult;
     public Text ConnectState;
     string result = "";
@@ -40,12 +41,22 @@ public class TestNetwork : MonoBehaviour, ISocketListener
             Result += "开始尝试连接\n";
             //usocket = new USocket(this, new LVProtocol());
             //usocket.Connect("192.168.0.102", 1520, false);
-            NetworkModule.Instance.Connect("192.168.0.102", 1520);
+            //NetworkModule.Instance.Connect("192.168.0.102", 1520);
+            NetworkModule.Instance.Connect("47.94.220.1", 1520);
             Messenger.AddListener<IMessage>(MessageID.ResUserLogin.ToString(), (data) =>
             {
                 ResUserLoginMessage response = data as ResUserLoginMessage;
-                result += response.Data + "\n";
+                Result += response.Data + "\n";
             });
+        });
+        btnSend.onClick.AddListener(() =>
+        {
+            Result += "开始发送数据\n";
+            //usocket = new USocket(this, new LVProtocol());
+            //usocket.Connect("192.168.0.102", 1520, false);
+            //NetworkModule.Instance.Connect("192.168.0.102", 1520);
+            NetworkModule.Instance.Send(MessageID.ReqUserLogin, new ReqUserLoginMessage() { Username = "abc", Password = "123" });
+            //Messenger.BroadcastAsync<IMessage>(MessageID.ResUserLogin.ToString(), new ResUserLoginMessage() { Code = 2, Data = "123" });
         });
     }
     // Use this for initialization

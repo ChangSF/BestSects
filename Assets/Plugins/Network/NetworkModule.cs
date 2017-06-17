@@ -56,6 +56,12 @@ namespace BestSects.Net
             socket.Connect(ip, port, address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6);
             netState = NetState.Connecting;
         }
+
+        public void Send(MessageID msgId, IMessage msg)
+        {
+            sender.Send(msgId, msg);
+        }
+
         void OnOpen()
         {
             netState = NetState.Connected;
@@ -83,7 +89,7 @@ namespace BestSects.Net
     /// <summary>
     /// 负责发送消息
     /// </summary>
-    public class USocketSender
+    internal class USocketSender
     {
         private USocket socket;
         public USocketSender(USocket socket)
@@ -108,12 +114,14 @@ namespace BestSects.Net
     /// <summary>
     /// 负责转发接收的消息,处理这几个事件
     /// </summary>
-    public class USocketListener : SocketListener
+    internal class USocketListener : SocketListener
     {
         Action onOpen, onClose, onMessage = null;
         public USocketListener(Action onOpen, Action onClose, Action onMessage = null)
         {
-
+            this.onOpen = onOpen;
+            this.onClose = onClose;
+            this.onMessage = onMessage;
         }
         public override void OnClose(USocket us, bool fromRemote)
         {
@@ -137,29 +145,33 @@ namespace BestSects.Net
             if (onMessage != null)
                 onMessage();
             int len = bb.ReadShort();
-            MessageID msgId = (MessageID)bb.ReadShort();
+            
             if (bb.ReadableBytes() != len)
             {
-                Log.Error("数据长度不对!" + msgId.ToString());
+                Log.Error("数据长度不对!");
                 return;
             }
-            byte[] data = bb.ReadBytes(len - 4);
+            MessageID msgId = (MessageID)bb.ReadShort();
+            byte[] data = bb.ReadBytes(len - 2);
             IMessage msgData = null;
             switch (msgId)
             {
                 case MessageID.ReqUserLogin:
-                    ReqUserLoginMessage userLogin = ReqUserLoginMessage.Parser.ParseFrom(data);
-                    msgData = userLogin;
-                    break;
                 case MessageID.ReqUserRegister:
-                    break;
+                    Log.Error("收到请求消息非法!");
+                    return;
+
                 case MessageID.ResUserLogin:
+                    ResUserLoginMessage userLogin = ResUserLoginMessage.Parser.ParseFrom(data);
+                    msgData = userLogin;
                     break;
                 case MessageID.ResUserRegister:
                     break;
                 default:
                     break;
             }
+            if (msgData == null)
+                return;
             Messenger.BroadcastAsync<IMessage>(msgId.ToString(), msgData);
         }
 

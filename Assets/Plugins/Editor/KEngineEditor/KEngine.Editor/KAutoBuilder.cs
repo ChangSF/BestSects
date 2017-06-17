@@ -185,7 +185,7 @@ namespace KEngine.Editor
         [MenuItem("KEngine/AutoBuilder/Android")]
         public static void PerformAndroidBuild()
         {
-            PerformAndroidBuild("StrikeHero");
+            PerformAndroidBuild("BestSects");
         }
 
         public static string PerformAndroidBuild(string apkName, bool isDevelopment = true)

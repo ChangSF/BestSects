@@ -23,17 +23,17 @@ namespace BestSects.protocol {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChNMb2dpblByb3RvY29sLnByb3RvIjkKE1JlcVVzZXJMb2dpbk1lc3NhZ2US",
-            "EAoIdXNlcm5hbWUYASABKAkSEAoIcGFzc3dvcmQYAiABKAkiIwoTUmVzVXNl",
-            "ckxvZ2luTWVzc2FnZRIMCgRkYXRhGAEgASgJIjwKFlJlcVVzZXJSZWdpc3Rl",
-            "ck1lc3NhZ2USEAoIdXNlcm5hbWUYASABKAkSEAoIcGFzc3dvcmQYAiABKAki",
-            "JgoWUmVzVXNlclJlZ2lzdGVyTWVzc2FnZRIMCgRkYXRhGAEgASgJQkgKImNv",
-            "bS5sZWFkZXIubG9naW4ucHJvdG9idWYucHJvdG9jb2xCDUxvZ2luUHJvdG9j",
-            "b2yqAhJCZXN0U2VjdHMucHJvdG9jb2xiBnByb3RvMw=="));
+            "EAoIdXNlcm5hbWUYASABKAkSEAoIcGFzc3dvcmQYAiABKAkiMQoTUmVzVXNl",
+            "ckxvZ2luTWVzc2FnZRIMCgRjb2RlGAEgASgFEgwKBGRhdGEYAiABKAkiPAoW",
+            "UmVxVXNlclJlZ2lzdGVyTWVzc2FnZRIQCgh1c2VybmFtZRgBIAEoCRIQCghw",
+            "YXNzd29yZBgCIAEoCSImChZSZXNVc2VyUmVnaXN0ZXJNZXNzYWdlEgwKBGRh",
+            "dGEYASABKAlCSAoiY29tLmxlYWRlci5sb2dpbi5wcm90b2J1Zi5wcm90b2Nv",
+            "bEINTG9naW5Qcm90b2NvbKoCEkJlc3RTZWN0cy5wcm90b2NvbGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::BestSects.protocol.ReqUserLoginMessage), global::BestSects.protocol.ReqUserLoginMessage.Parser, new[]{ "Username", "Password" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::BestSects.protocol.ResUserLoginMessage), global::BestSects.protocol.ResUserLoginMessage.Parser, new[]{ "Data" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::BestSects.protocol.ResUserLoginMessage), global::BestSects.protocol.ResUserLoginMessage.Parser, new[]{ "Code", "Data" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::BestSects.protocol.ReqUserRegisterMessage), global::BestSects.protocol.ReqUserRegisterMessage.Parser, new[]{ "Username", "Password" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::BestSects.protocol.ResUserRegisterMessage), global::BestSects.protocol.ResUserRegisterMessage.Parser, new[]{ "Data" }, null, null, null)
           }));
@@ -217,6 +217,7 @@ namespace BestSects.protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public ResUserLoginMessage(ResUserLoginMessage other) : this() {
+      code_ = other.code_;
       data_ = other.data_;
     }
 
@@ -225,8 +226,19 @@ namespace BestSects.protocol {
       return new ResUserLoginMessage(this);
     }
 
+    /// <summary>Field number for the "code" field.</summary>
+    public const int CodeFieldNumber = 1;
+    private int code_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Code {
+      get { return code_; }
+      set {
+        code_ = value;
+      }
+    }
+
     /// <summary>Field number for the "data" field.</summary>
-    public const int DataFieldNumber = 1;
+    public const int DataFieldNumber = 2;
     private string data_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Data {
@@ -249,6 +261,7 @@ namespace BestSects.protocol {
       if (ReferenceEquals(other, this)) {
         return true;
       }
+      if (Code != other.Code) return false;
       if (Data != other.Data) return false;
       return true;
     }
@@ -256,6 +269,7 @@ namespace BestSects.protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
+      if (Code != 0) hash ^= Code.GetHashCode();
       if (Data.Length != 0) hash ^= Data.GetHashCode();
       return hash;
     }
@@ -267,8 +281,12 @@ namespace BestSects.protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
+      if (Code != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(Code);
+      }
       if (Data.Length != 0) {
-        output.WriteRawTag(10);
+        output.WriteRawTag(18);
         output.WriteString(Data);
       }
     }
@@ -276,6 +294,9 @@ namespace BestSects.protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
+      if (Code != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Code);
+      }
       if (Data.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Data);
       }
@@ -286,6 +307,9 @@ namespace BestSects.protocol {
     public void MergeFrom(ResUserLoginMessage other) {
       if (other == null) {
         return;
+      }
+      if (other.Code != 0) {
+        Code = other.Code;
       }
       if (other.Data.Length != 0) {
         Data = other.Data;
@@ -300,7 +324,11 @@ namespace BestSects.protocol {
           default:
             input.SkipLastField();
             break;
-          case 10: {
+          case 8: {
+            Code = input.ReadInt32();
+            break;
+          }
+          case 18: {
             Data = input.ReadString();
             break;
           }
