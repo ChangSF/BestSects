@@ -12,7 +12,7 @@ public class CompileProtoFiles : Editor
     const string PROTO_FOLDER = @"..\Product\proto";
     const string PROTO_CSHARP_FOLDER = @".\Plugins\Network\protocol";
     const string PROTOC_PATH = @"..\Product\proto\tools\bin\protoc.exe";
-
+    const string NameSpace = @"BestSects.protocol";
 
     [MenuItem("Tools/Protobuf/CompileAll")]
     public static void CompileAllProto()
@@ -56,6 +56,20 @@ public class CompileProtoFiles : Editor
             }
             filePath = protoFiles.Dequeue();
         }
+        //option csharp_namespace = "BestSects.protocol";
+        FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite);
+        StreamReader sr = new StreamReader(fs);
+        
+        string content = sr.ReadToEnd();
+        if (!content.Contains("option csharp_namespace"))
+        {
+            int index = content.IndexOf("option java_outer_classname = \"LoginProtocol\";");
+            content.Insert(index, "option csharp_namespace = \"" + NameSpace + "\";\n");
+            sr.Close();
+            fs.Close();
+            StreamWriter sw = new StreamWriter(fs);
+        }
+
         Process process = new Process();
         process.StartInfo.FileName = Path.Combine(Application.dataPath, PROTOC_PATH);
         process.StartInfo.Arguments = " --csharp_out=" + exportFolder + " --proto_path=" + protoFolder + " " + filePath;
