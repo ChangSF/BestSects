@@ -67,6 +67,7 @@ namespace SLua
             // add its name into list, slua will generate all exported interface automatically for you
 
             //list.Add("NGUI");
+            list.Add("DOTween");
         }
 
         public static HashSet<string> OnAddCustomNamespace()
@@ -75,6 +76,7 @@ namespace SLua
             {
                 //"NLuaTest.Mock"
                 "AppSettings",
+                "BestSects.protocol",
             };
         }
 
@@ -173,11 +175,11 @@ namespace SLua
                 "GraphicRebuildTracker",
                 "Advertisements",
                 "UnityEditor",
-			    "WSA",
-			    "EventProvider",
-			    "Apple",
-			    "ClusterInput",
-				"Motion",
+                "WSA",
+                "EventProvider",
+                "Apple",
+                "ClusterInput",
+                "Motion",
                 //TODO:这里是命名空间屏蔽
                 "UnityEngine.UI.ReflectionMethodsCache",
                 "UnityEngine.Light",
