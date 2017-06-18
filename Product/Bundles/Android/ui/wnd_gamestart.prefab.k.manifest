@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1073212164
+CRC: 4183386139
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: af2b2b84787326c6f2dec321d6f58776
+    Hash: a084c17f38b5bf5b228408fb27086420
   TypeTreeHash:
     serializedVersion: 2
     Hash: a072734d19a4c811ba35db4dc207f4fd
@@ -47,4 +47,6 @@ ClassTypes:
   Script: {instanceID: 0}
 Assets:
 - Assets/BundleResources/UI/WND_GameStart.prefab
-Dependencies: []
+Dependencies:
+- D:/Workspace/BestSects/Product/Bundles/Android/uiatlas/button/button_green.png.k
+- D:/Workspace/BestSects/Product/Bundles/Android/uiatlas/button/button_red.png.k

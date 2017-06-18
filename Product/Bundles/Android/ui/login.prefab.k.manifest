@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1633795156
+CRC: 2779052181
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 40fed2f09cc12458bff0027e201cc46b
+    Hash: e14503085665194b1f9788302aa28b10
   TypeTreeHash:
     serializedVersion: 2
     Hash: cfe50d3b00c75054ec6ef070df0f9ee9
@@ -45,4 +45,6 @@ ClassTypes:
   Script: {instanceID: 0}
 Assets:
 - Assets/BundleResources/UI/Login.prefab
-Dependencies: []
+Dependencies:
+- D:/Workspace/BestSects/Product/Bundles/Android/uiatlas/anim1/0004.png.k
+- D:/Workspace/BestSects/Product/Bundles/Android/uiatlas/button/button_green.png.k

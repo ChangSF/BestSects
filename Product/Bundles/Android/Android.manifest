@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 669093533
+CRC: 549638880
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -7,7 +7,9 @@ AssetBundleManifest:
       Dependencies: {}
     Info_1:
       Name: ui/login.prefab.k
-      Dependencies: {}
+      Dependencies:
+        Dependency_0: uiatlas/anim1/0004.png.k
+        Dependency_1: uiatlas/button/button_green.png.k
     Info_2:
       Name: ui/main.prefab.k
       Dependencies: {}
@@ -16,7 +18,53 @@ AssetBundleManifest:
       Dependencies: {}
     Info_4:
       Name: ui/wnd_introduce.prefab.k
-      Dependencies: {}
+      Dependencies:
+        Dependency_0: uiatlas/button/button_red.png.k
+        Dependency_1: uiatlas/picture/budeliao.png.k
     Info_5:
       Name: ui/wnd_gamestart.prefab.k
+      Dependencies:
+        Dependency_0: uiatlas/button/button_green.png.k
+        Dependency_1: uiatlas/button/button_red.png.k
+    Info_6:
+      Name: uiatlas/anim1/0001.png.k
+      Dependencies: {}
+    Info_7:
+      Name: uiatlas/anim1/0002.png.k
+      Dependencies: {}
+    Info_8:
+      Name: uiatlas/anim1/0003.png.k
+      Dependencies: {}
+    Info_9:
+      Name: uiatlas/anim1/0004.png.k
+      Dependencies: {}
+    Info_10:
+      Name: uiatlas/anim1/0005.png.k
+      Dependencies: {}
+    Info_11:
+      Name: uiatlas/anim1/image.controller.k
+      Dependencies: {}
+    Info_12:
+      Name: uiatlas/anim1/person.anim.k
+      Dependencies: {}
+    Info_13:
+      Name: uiatlas/button/button_green.png.k
+      Dependencies: {}
+    Info_14:
+      Name: uiatlas/button/button_green_border.png.k
+      Dependencies: {}
+    Info_15:
+      Name: uiatlas/button/button_red.png.k
+      Dependencies: {}
+    Info_16:
+      Name: uiatlas/button/button_yellow.png.k
+      Dependencies: {}
+    Info_17:
+      Name: uiatlas/common/equipborder.png.k
+      Dependencies: {}
+    Info_18:
+      Name: uiatlas/icon/icon.jpg.k
+      Dependencies: {}
+    Info_19:
+      Name: uiatlas/picture/budeliao.png.k
       Dependencies: {}
