@@ -1,33 +1,34 @@
-ï»¿syntax = "proto3";
+syntax = "proto3";
 option java_package = "com.leader.login.protobuf.protocol"; 
+option csharp_namespace = "BestSects.protocol";
 option java_outer_classname = "LoginProtocol";
 
-//æœåŠ¡å™¨æ³¨å†Œæ¶ˆæ¯è¯·æ±‚
+//·şÎñÆ÷×¢²áÏûÏ¢ÇëÇó
 message ReqRegisterServerMessage{
-	int32 serverID = 1; //æœåŠ¡å™¨ç¼–å·
-	string name = 2;//åå­—
-	string ip = 3;//å¤–ç½‘ipåœ°å€
-	int32 port = 4;//ç«¯å£å·
+	int32 serverID = 1; //·şÎñÆ÷±àºÅ
+	string name = 2;//Ãû×Ö
+	string ip = 3;//ÍâÍøipµØÖ·
+	int32 port = 4;//¶Ë¿ÚºÅ
 }
 
-//ç½‘å…³æœæ³¨å†Œå“åº”æ¶ˆæ¯
+//Íø¹Ø·ş×¢²áÏìÓ¦ÏûÏ¢
 message ResRegisterServerMessage{
-	int32 code = 1; //å“åº”ç 
-	string serverName = 2; //æœåŠ¡å™¨åå­—
+	int32 code = 1; //ÏìÓ¦Âë
+	string serverName = 2; //·şÎñÆ÷Ãû×Ö
 }
 
-//ç½‘å…³æœæ³¨å†Œå¿ƒè·³æ¶ˆæ¯
+//Íø¹Ø·ş×¢²áĞÄÌøÏûÏ¢
 message ReqInternalHeartbeatMessage{
-	int32 online = 1; //åœ¨çº¿äººæ•°
+	int32 online = 1; //ÔÚÏßÈËÊı
 }
 
-// ç©å®¶ç™»å½•è¯·æ±‚
+// Íæ¼ÒµÇÂ¼ÇëÇó
 message ReqUserLoginMessage{
 		string username = 1;
 		string password = 2;
 }
 
-// ç©å®¶ç™»å½•å“åº”
+// Íæ¼ÒµÇÂ¼ÏìÓ¦
 message ResUserLoginMessage{
 		int32 code = 1;
 		string msg = 2;
@@ -39,35 +40,35 @@ message UserRoleMessage{
 		int64 uid = 1;
 		int32 serverID = 2;
 		string nickname = 3;
-		int32 sex = 4;// 1ç”·2å¥³
+		int32 sex = 4;// 1ÄĞ2Å®
 		int32 level = 5;
 }
 
-// ç©å®¶æ³¨å†Œè¯·æ±‚
+// Íæ¼Ò×¢²áÇëÇó
 message ReqUserRegisterMessage{
 		string username = 1;
 		string password = 2;
 }
 
-// ç©å®¶æ³¨å†Œå“åº”
+// Íæ¼Ò×¢²áÏìÓ¦
 message ResUserRegisterMessage{
 		int32 code = 1;
 		string msg = 2;
 		string token = 3;
 }
 
-// éªŒè¯ç©å®¶ç™»å½•ä»¤ç‰Œè¯·æ±‚
+// ÑéÖ¤Íæ¼ÒµÇÂ¼ÁîÅÆÇëÇó
 message ReqVerifyTokenMessage{
 		string token = 1;
 		string username = 2;
 }
 
-// éªŒè¯ç©å®¶ç™»å½•ä»¤ç‰Œå“åº”
+// ÑéÖ¤Íæ¼ÒµÇÂ¼ÁîÅÆÏìÓ¦
 message ResVerifyTokenMessage{
 		int32 code = 1;
 }
 
-// æ›´æ–°ç©å®¶è§’è‰²è¯·æ±‚
+// ¸üĞÂÍæ¼Ò½ÇÉ«ÇëÇó
 message ReqUpdatePlayerMessage{
 		string username = 1;
 		int32 serverID = 2;

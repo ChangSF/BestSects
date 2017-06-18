@@ -46,7 +46,7 @@ public class TestNetwork : MonoBehaviour, ISocketListener
             Messenger.AddListener<IMessage>(MessageID.ResUserLogin.ToString(), (data) =>
             {
                 ResUserLoginMessage response = data as ResUserLoginMessage;
-                Result += response.Data + "\n";
+                Result += response.Msg + "\n";
             });
         });
         btnSend.onClick.AddListener(() =>

@@ -35,6 +35,7 @@ using KSFramework;
 
 public class Game : KSGame
 {
+    public string wndName = "";
     /// <summary>
     /// Add Your Custom Initable(Coroutine) Modules Here...
     /// </summary>
@@ -76,7 +77,7 @@ public class Game : KSGame
         yield return null;
 
         Log.Info("======================================= Open Window 'Login' =================================");
-        UIModule.Instance.OpenWindow("WND_GameStart", 888);
+        UIModule.Instance.OpenWindow(wndName);
 
         // Test Load a scene in asset bundle
         //SceneLoader.Load("Scene/TestScene/TestScene.unity");
