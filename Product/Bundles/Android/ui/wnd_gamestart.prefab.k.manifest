@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 4183386139
+CRC: 1832720808
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a084c17f38b5bf5b228408fb27086420
+    Hash: a7f858de76fd5e5610d023698507996e
   TypeTreeHash:
     serializedVersion: 2
-    Hash: a072734d19a4c811ba35db4dc207f4fd
+    Hash: 07c73bfb6b2de4c7ef3677077ac82557
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -20,19 +20,21 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 0c01f3f0b88b4448ab1ccfa117a1d57e, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 610cbe31b1debe844a9340b9043ee3f8, type: 3}
-- Class: 114
-  Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-- Class: 114
   Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 - Class: 114
   Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 - Class: 114
   Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 - Class: 114
+  Script: {fileID: -900027084, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: -113659843, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
   Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 938311ed4b5a34590af2bad889d53090, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: b17aae26b8a61fa46ab7ddce40d03286, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
@@ -47,6 +49,4 @@ ClassTypes:
   Script: {instanceID: 0}
 Assets:
 - Assets/BundleResources/UI/WND_GameStart.prefab
-Dependencies:
-- D:/Workspace/BestSects/Product/Bundles/Android/uiatlas/button/button_green.png.k
-- D:/Workspace/BestSects/Product/Bundles/Android/uiatlas/button/button_red.png.k
+Dependencies: []

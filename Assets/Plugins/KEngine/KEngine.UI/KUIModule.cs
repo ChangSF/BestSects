@@ -180,7 +180,7 @@ namespace KEngine.UI
                 uiInstanceState.IsLoading = true;
                 uiInstanceState.UIWindow = null;
                 uiInstanceState.OpenWhenFinish = true;
-				uiInstanceState.OpenArgs = args;
+                uiInstanceState.OpenArgs = args;
                 UIWindows[instanceName] = uiInstanceState;
             }
 
@@ -188,16 +188,16 @@ namespace KEngine.UI
             {
                 // _args useless
 
-					UILoadState newUiInstanceState = _GetUIState(instanceName);
-					UILoadState templateState = _GetUIState(template);
+                UILoadState newUiInstanceState = _GetUIState(instanceName);
+                UILoadState templateState = _GetUIState(template);
 
                 // 组合template和name的参数 和args外部参数
-					object[] totalArgs = new object[newUiInstanceState.OpenArgs.Length + 2];
-                	totalArgs[0] = template;
-	                totalArgs[1] = instanceName;
-					newUiInstanceState.OpenArgs.CopyTo(totalArgs, 2);
+                object[] totalArgs = new object[newUiInstanceState.OpenArgs.Length + 2];
+                totalArgs[0] = template;
+                totalArgs[1] = instanceName;
+                newUiInstanceState.OpenArgs.CopyTo(totalArgs, 2);
 
-					OnDynamicWindowCallback(templateState.UIWindow, totalArgs);
+                OnDynamicWindowCallback(templateState.UIWindow, totalArgs);
             });
 
             return uiInstanceState;
@@ -257,22 +257,19 @@ namespace KEngine.UI
                 return;
             }
 
-            Action doCloseAction = () =>
+            //Action doCloseAction = () =>
+            //{
+            uiState.UIWindow.gameObject.SetActive(false);
+            uiState.UIWindow.OnClose();
+            if (OnCloseEvent != null)
+                OnCloseEvent(uiState.UIWindow);
+            if (!uiState.IsStaticUI)
             {
-                uiState.UIWindow.gameObject.SetActive(false);
+                DestroyWindow(name);
+            }
+            //};
 
-                uiState.UIWindow.OnClose();
-
-                if (OnCloseEvent != null)
-                    OnCloseEvent(uiState.UIWindow);
-
-                if (!uiState.IsStaticUI)
-                {
-                    DestroyWindow(name);
-                }
-            };
-
-            doCloseAction();
+            //doCloseAction();
         }
 
         /// <summary>
@@ -368,7 +365,7 @@ namespace KEngine.UI
             //if (openState.IsLoading)
             openState.OpenWhenFinish = openWhenFinish;
 
-			UIWindows.Add(windowTemplateName, openState);
+            UIWindows.Add(windowTemplateName, openState);
             KResourceModule.Instance.StartCoroutine(LoadUIAssetBundle(windowTemplateName, openState));
 
             return openState;
@@ -526,10 +523,10 @@ namespace KEngine.UI
             {
                 if (uiBase.gameObject.activeSelf)
                 {
-					uiBase.OnClose();
+                    uiBase.OnClose();
 
-					if (OnCloseEvent != null)
-						OnCloseEvent(uiBase);
+                    if (OnCloseEvent != null)
+                        OnCloseEvent(uiBase);
                 }
 
                 uiBase.BeforeOpen(args, () =>

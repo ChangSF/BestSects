@@ -9,7 +9,7 @@ using Google.Protobuf;
 using BestSects.Net;
 using BestSects.protocol;
 
-public class TestNetwork : MonoBehaviour, ISocketListener
+public class TestNetwork : MonoBehaviour
 {
     public Button btnConnect;
     public Button btnSend;
@@ -58,6 +58,7 @@ public class TestNetwork : MonoBehaviour, ISocketListener
             NetworkModule.Instance.Send(MessageID.ReqUserLogin, new ReqUserLoginMessage() { Username = "abc", Password = "123" });
             //Messenger.BroadcastAsync<IMessage>(MessageID.ResUserLogin.ToString(), new ResUserLoginMessage() { Code = 2, Data = "123" });
         });
+        
     }
     // Use this for initialization
     void Start()
@@ -86,53 +87,5 @@ public class TestNetwork : MonoBehaviour, ISocketListener
         }
         ConnectState.text = NetworkModule.Instance.State.ToString();
     }
-    public void OnMessage(USocket us, ByteBuf bb)
-    {
-
-        Result += "收到数据:\n";
-        bb.ReaderIndex(us.getProtocol().HeaderLen());
-
-        int cmd = bb.ReadShort();
-        Type t = null;
-        MemoryStream stream = new MemoryStream(bb.GetRaw(), bb.ReaderIndex(), bb.ReadableBytes());
-        //object response = ProtoBuf.Serializer.NonGeneric.Deserialize(t, stream);
-
-        /**
-        Console.WriteLine (response.pid);
-        Console.WriteLine(response.info);
-        Console.WriteLine(response.success);
-        */
-    }
-    /**
-     * 
-     */
-    public void OnClose(USocket us, bool fromRemote)
-    {
-        Result += ("连接被关闭：" + fromRemote + "\n");
-    }
-    public void OnIdle(USocket us)
-    {
-        Result += "连接超时：\n";
-    }
-    public void OnOpen(USocket us)
-    {
-
-        Result += "连接建立\n";
-        //AuthRequest request = new AuthRequest();
-        //request.loginid = "lkjlkj;sdf你好";
-        //request.serverid = 1;
-        //MemoryStream stream = new MemoryStream();
-        //ProtoBuf.Serializer.Serialize<AuthRequest>(stream, request);
-
-        //Varint32Frame f = new Varint32Frame(512);
-        //f.PutShort(6);
-        //f.PutBytes(stream.ToArray());
-        //f.End();
-        //us.Send(f);
-
-    }
-    public void OnError(USocket us, string err)
-    {
-        Result += "错误：" + err + "\n";
-    }
+    
 }

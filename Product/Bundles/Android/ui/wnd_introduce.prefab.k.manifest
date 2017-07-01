@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1381732365
+CRC: 3670943983
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b778d4c9edbd93063cfa2fcdbde5f0e4
+    Hash: c81f01a7068d443a92ddf146050c05b6
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2c8bd6113672cf79fd965168dec0a409
@@ -51,6 +51,4 @@ ClassTypes:
   Script: {instanceID: 0}
 Assets:
 - Assets/BundleResources/UI/WND_Introduce.prefab
-Dependencies:
-- D:/Workspace/BestSects/Product/Bundles/Android/uiatlas/button/button_red.png.k
-- D:/Workspace/BestSects/Product/Bundles/Android/uiatlas/picture/budeliao.png.k
+Dependencies: []
