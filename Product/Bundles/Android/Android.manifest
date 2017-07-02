@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 2830306147
+CRC: 3156787547
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -18,5 +18,5 @@ AssetBundleManifest:
       Name: ui/wnd_introduce.prefab.k
       Dependencies: {}
     Info_5:
-      Name: ui/wnd_gamestart.prefab.k
+      Name: ui/wnd_login.prefab.k
       Dependencies: {}

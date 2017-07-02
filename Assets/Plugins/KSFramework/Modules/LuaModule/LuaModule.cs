@@ -42,20 +42,20 @@ namespace KSFramework
 
         private double _initProgress = 0;
 
-        public double InitProgress { get { return _initProgress; }}
+        public double InitProgress { get { return _initProgress; } }
 
         public LuaState State
         {
             get { return _luaSvr.luaState; }
         }
 
-		/// <summary>
-		/// 是否开启缓存模式，默认true，首次执行将把执行结果table存起来；在非缓存模式下，也可以通过编辑器的Reload来进行强制刷新缓存
-		/// 对实时性重载要求高的，可以把开关设置成false，长期都进行Lua脚本重载，理论上会消耗额外的性能用于语法解析
-		/// 
-		/// 一般的脚本语言，如Python, NodeJS中，其import, require关键字都会对加载过的模块进行缓存(包括Lua原生的require)；如果不缓存，要注意状态的保存问题
-		/// 该值调用频繁，就不放ini了
-		/// </summary>
+        /// <summary>
+        /// 是否开启缓存模式，默认true，首次执行将把执行结果table存起来；在非缓存模式下，也可以通过编辑器的Reload来进行强制刷新缓存
+        /// 对实时性重载要求高的，可以把开关设置成false，长期都进行Lua脚本重载，理论上会消耗额外的性能用于语法解析
+        /// 
+        /// 一般的脚本语言，如Python, NodeJS中，其import, require关键字都会对加载过的模块进行缓存(包括Lua原生的require)；如果不缓存，要注意状态的保存问题
+        /// 该值调用频繁，就不放ini了
+        /// </summary>
         public static bool CacheMode = false;
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace KSFramework
         /// <returns></returns>
         public object Import(string fileName)
         {
-			if (!HasScript (fileName))
+            if (!HasScript(fileName))
                 throw new FileNotFoundException(string.Format("Not found UI Lua Script: {0}", fileName));
 
             return DoImportScript(fileName);
@@ -239,29 +239,29 @@ namespace KSFramework
             IsInited = true;
         }
 
-		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-		static public int ImportCSharpType(IntPtr l)
-		{
-			try
-			{
-				string cls;
-				Helper.checkType(l, 1, out cls);
-				Type t = LuaObject.FindType(cls);
-				if (t == null)
-				{
-					return Helper.error(l, "Can't find {0} to create", cls);
-				}
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static public int ImportCSharpType(IntPtr l)
+        {
+            try
+            {
+                string cls;
+                Helper.checkType(l, 1, out cls);
+                Type t = LuaObject.FindType(cls);
+                if (t == null)
+                {
+                    return Helper.error(l, "Can't find {0} to create", cls);
+                }
 
-				LuaClassObject co = new LuaClassObject(t);
-				LuaObject.pushObject(l,co);
-				Helper.pushValue(l, true);
-				return 2;
-			}
-			catch (Exception e)
-			{
-				return Helper.error(l, e);
-			}
-		}
+                LuaClassObject co = new LuaClassObject(t);
+                LuaObject.pushObject(l, co);
+                Helper.pushValue(l, true);
+                return 2;
+            }
+            catch (Exception e)
+            {
+                return Helper.error(l, e);
+            }
+        }
         /// <summary>
         /// same as SLua default import
         /// </summary>

@@ -1,0 +1,34 @@
+ManifestFileVersion: 0
+CRC: 1733200302
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 397c1b1eaa4a2f793d0ea27f79b5d062
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: f55cfb3c0d99e59327622baa09644f25
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 938311ed4b5a34590af2bad889d53090, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: a7f44389744e93c4286b0a7e3dfbddf5, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 223
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+Assets:
+- Assets/BundleResources/UI/WND_Login.prefab
+Dependencies: []

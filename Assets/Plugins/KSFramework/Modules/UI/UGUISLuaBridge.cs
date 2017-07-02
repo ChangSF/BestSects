@@ -12,17 +12,21 @@ namespace KSFramework
 
         public virtual void InitBridge()
         {
-            EventSystem = new GameObject("EventSystem").AddComponent<EventSystem>();
-            EventSystem.gameObject.AddComponent<StandaloneInputModule>();
+            if (EventSystem.current == null)
+            {
+                EventSystem = new GameObject("EventSystem").AddComponent<EventSystem>();
+                EventSystem.gameObject.AddComponent<StandaloneInputModule>();
 #if !UNITY_5
-            EventSystem.gameObject.AddComponent<TouchInputModule>();
+                EventSystem.gameObject.AddComponent<TouchInputModule>();
 #else
-            EventSystem.gameObject.GetComponent<StandaloneInputModule>().forceModuleActive = true;
+                EventSystem.gameObject.GetComponent<StandaloneInputModule>().forceModuleActive = true;
 #endif
+            }
         }
 
         public virtual UIController CreateUIController(GameObject uiObj, string uiTemplateName)
         {
+            //做修改，使c#的uicontroller也能使用，但是优先使用slua的
             UIController uiBase = uiObj.AddComponent<LuaUIController>();
             
             KEngine.Debuger.Assert(uiBase);

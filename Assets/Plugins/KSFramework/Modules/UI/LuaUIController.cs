@@ -48,7 +48,12 @@ namespace KSFramework
             base.OnInit();
 
             if (!CheckInitScript(true))
+            {
+                CSUIController csController = this.gameObject.GetComponent<CSUIController>();
+                if (csController)
+                    csController.OnInit();
                 return;
+            }
         }
 
         /// <summary>
@@ -62,7 +67,12 @@ namespace KSFramework
 
             base.OnOpen(args);
             if (!CheckInitScript())
+            {
+                CSUIController csController = this.gameObject.GetComponent<CSUIController>();
+                if (csController)
+                    csController.OnOpen(args);
                 return;
+            }
 
             var onOpenFuncObj = _luaTable["OnOpen"];
             if (onOpenFuncObj == null)
@@ -85,7 +95,12 @@ namespace KSFramework
         {
             base.OnClose();
             if (!CheckInitScript())
+            {
+                CSUIController csController = this.gameObject.GetComponent<CSUIController>();
+                if (csController)
+                    csController.OnClose();
                 return;
+            }
             var closeFunc = _luaTable["OnClose"];
             if (closeFunc != null)
             {
@@ -117,7 +132,9 @@ namespace KSFramework
                     Log.LogWarning("Import UI Lua Script failed: {0}", relPath);
                 return false;
             }
-
+            //存在lua脚本，那么优先使用lua
+            if (this.gameObject.GetComponent<CSUIController>())
+                Destroy(this.gameObject.GetComponent<CSUIController>());
             scriptResult = KSGame.Instance.LuaModule.CallScript(relPath);
             Debuger.Assert(scriptResult is LuaTable, "{0} Script Must Return Lua Table with functions!", UITemplateName);
 

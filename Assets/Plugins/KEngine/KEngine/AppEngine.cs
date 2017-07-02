@@ -125,7 +125,6 @@ namespace KEngine
             appEngine._isNewByStatic = true;
             appEngine.GameModules = modules;
             appEngine.AppEntry = entry;
-
             return appEngine;
         }
 
@@ -179,10 +178,8 @@ namespace KEngine
         private IEnumerator DoInit()
         {
             yield return null;
-
             if (AppEntry != null)
                 yield return StartCoroutine(AppEntry.OnBeforeInit());
-
 
 //            if (GameModules != null)
             yield return StartCoroutine(DoInitModules(GameModules));
