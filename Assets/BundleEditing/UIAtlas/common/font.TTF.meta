@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 00b743484267461448808c77e8f01515
+timeCreated: 1499101647
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: zhongqi-Hanmo
+  fontNames:
+  - zhongqi-Hanmo
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
