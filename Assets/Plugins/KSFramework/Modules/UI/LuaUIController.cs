@@ -134,7 +134,12 @@ namespace KSFramework
             }
             //存在lua脚本，那么优先使用lua
             if (this.gameObject.GetComponent<CSUIController>())
-                Destroy(this.gameObject.GetComponent<CSUIController>());
+            {
+                if (this.gameObject.GetComponent<CSUIController>().useLuaFirst)
+                    Destroy(this.gameObject.GetComponent<CSUIController>());
+                else
+                    return false;
+            }
             scriptResult = KSGame.Instance.LuaModule.CallScript(relPath);
             Debuger.Assert(scriptResult is LuaTable, "{0} Script Must Return Lua Table with functions!", UITemplateName);
 
@@ -155,11 +160,36 @@ namespace KSFramework
                     var outletInfo = outlet.OutletInfos[i];
 
                     var gameObj = outletInfo.Object as GameObject;
-
                     if (gameObj != null)
                         _luaTable[outletInfo.Name] = gameObj.GetComponent(outletInfo.ComponentType);
                     else
-                        _luaTable[outletInfo.Name] = outletInfo.Object;
+                        _luaTable[outletInfo.Name] = gameObj;
+                    if (_luaTable[outletInfo.Name] == null)
+                    {
+                        //switch (outletInfo.ComponentType)
+                        //{
+                        //    case "UnityEngine.RectTransform":
+                        //        _luaTable[outletInfo.Name] = gameObj.GetComponent<RectTransform>();
+                        //        break;
+                        //    case "UnityEngine.Transform":
+                        //        _luaTable[outletInfo.Name] = gameObj.GetComponent<Transform>();
+                        //        break;
+                        //    case "UnityEngine.AudioSource":
+                        //        _luaTable[outletInfo.Name] =gameObj.GetComponent<AudioSource>();
+                        //        break;
+                        //    default:
+                        //        _luaTable[outletInfo.Name] = outletInfo.Object;
+                        //        Debug.LogError("导入未知类型=> " + outletInfo.ComponentType);
+                        //        break;
+                        //}
+                        _luaTable[outletInfo.Name] = gameObj.GetComponent(outletInfo.ComponentType.Substring(outletInfo.ComponentType.LastIndexOf('.') + 1));
+                    }
+
+                    if (_luaTable[outletInfo.Name] == null)
+                    {
+                        Debug.LogError("导入未知类型=> " + outletInfo.ComponentType);
+
+                    }
                 }
 
             }

@@ -40,10 +40,10 @@ function UI_Introduce:OnInit(controller)
             local audioName = AppSettings.AudioConfigSettings.Get('zh').FileName
             print(audioName)
             local audioSource = self.MyAudioSource
-            --audioSource.Play()
-            local  audio = self:GetControl("UnityEngine.AudioSource","Audio Source")
+            audioSource:Play()
+            local  audio = self:GetControl("AudioSource","Audio Source")
             print(audio)
-            print(audioSource)
+            -- print(audioSource)
             local image=self.image
             print(image)
         end)
@@ -55,7 +55,6 @@ function UI_Introduce:OnInit(controller)
 end
 
 function UI_Introduce:OnOpen()
-    self.playBtn.text = "This is a title"
 end
 
 return UI_Introduce

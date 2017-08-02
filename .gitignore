@@ -42,3 +42,5 @@ Assets/Slua/Meta/Resources/lua3rdmeta.asset.meta
 /Assets/StreamingAssets/Bundles/*
 /Assets/SLua/LuaObject.meta
 /Assets/StreamingAssets/Lua/*
+/Assets/Code/Test
+/Assets/Code/Test.meta

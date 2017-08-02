@@ -69,7 +69,7 @@ namespace KSFramework
             UnityEngine.Debug.Log("Consturct LuaModule...");
 #endif
             _luaSvr = new LuaSvr();
-            _luaSvr.init(progress => { _initProgress = progress; }, () => { });
+            _luaSvr.init(progress => { _initProgress = progress; }, () => { }, LuaSvrFlag.LSF_BASIC/* | LuaSvrFlag.LSF_EXTLIB | LuaSvrFlag.LSF_3RDDLL*/);
         }
 
         /// <summary>

@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 3156787547
+CRC: 556680986
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -19,4 +19,10 @@ AssetBundleManifest:
       Dependencies: {}
     Info_5:
       Name: ui/wnd_login.prefab.k
+      Dependencies: {}
+    Info_6:
+      Name: ui/wnd_masterinfo.prefab.k
+      Dependencies: {}
+    Info_7:
+      Name: ui/wnd_studentinfo.prefab.k
       Dependencies: {}

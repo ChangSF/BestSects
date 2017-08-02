@@ -68,7 +68,6 @@ uCoroutine.yield = function(x)
 	end
 
 end
-
 -- backward compatibility of older versions
 UnityEngine.Yield = uCoroutine.yield
 ";

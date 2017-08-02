@@ -77,6 +77,8 @@ namespace SLua
                 //"NLuaTest.Mock"
                 "AppSettings",
                 "BestSects.protocol",
+                "LitJson",
+                "UnityEngine",
             };
         }
 

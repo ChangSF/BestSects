@@ -6,7 +6,7 @@ namespace KSFramework
 {
     public class CSUIController : UIController
     {
-
+        public bool useLuaFirst = true;
 
     }
 }

@@ -54,6 +54,7 @@ function UILogin:OnInit(controller)
         Log.Warning("Not found UnityEngine static code! No AddListener to the button")
     end
 	
+
     -- this button click to load new UI
     local btnMain = self.BtnMain
     if UnityEngine and  UnityEngine.Vector3 then -- static code binded!
