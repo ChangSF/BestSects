@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<Project Name="BestSects.luaprj" Cmd="" Arg="" Dir="" Toggle="false" >
+    <Filter Name="Lua" Directory=".\..\Product\Lua" Toggle="false" >
+        <LuaFile RelativePath=".\..\Product\Lua\Init.lua" />
+        <Filter Name="Behaviour" Directory=".\..\Product\Lua\Behaviour" Toggle="true" >
+            <LuaFile RelativePath=".\..\Product\Lua\Behaviour\TestLuaBehaviour.lua" />
+        </Filter>
+        <Filter Name="UI" Directory=".\..\Product\Lua\UI" Toggle="false" >
+            <LuaFile RelativePath=".\..\Product\Lua\UI\UIBase.lua" />
+            <Filter Name="Billboard" Directory=".\..\Product\Lua\UI\Billboard" Toggle="true" />
+            <Filter Name="Login" Directory=".\..\Product\Lua\UI\Login" Toggle="false" >
+                <LuaFile RelativePath=".\..\Product\Lua\UI\Login\Login.lua" />
+            </Filter>
+            <Filter Name="Main" Directory=".\..\Product\Lua\UI\Main" Toggle="false" >
+                <LuaFile RelativePath=".\..\Product\Lua\UI\Main\Main.lua" />
+            </Filter>
+            <Filter Name="WND_Introduce" Directory=".\..\Product\Lua\UI\WND_Introduce" Toggle="false" >
+                <LuaFile RelativePath=".\..\Product\Lua\UI\WND_Introduce\WND_Introduce.lua" />
+            </Filter>
+            <Filter Name="WND_Login" Directory=".\..\Product\Lua\UI\WND_Login" Toggle="false" >
+                <LuaFile RelativePath=".\..\Product\Lua\UI\WND_Login\WND_Login.lua" />
+            </Filter>
+        </Filter>
+    </Filter>
+</Project>

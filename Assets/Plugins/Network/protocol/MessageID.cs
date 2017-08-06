@@ -9,9 +9,14 @@ namespace BestSects.Net
 {
     public enum MessageID : short
     {
+        //本地消息
+        NetworkConnect = 0,
+        NetworkDisconnect = 1,
+
+        //请求
         ReqUserLogin = 110,
         ReqUserRegister = 111,
-
+        //响应
         ResUserLogin = 210,
         ResUserRegister = 211,
     }

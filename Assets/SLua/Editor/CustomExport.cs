@@ -78,7 +78,7 @@ namespace SLua
                 "AppSettings",
                 "BestSects.protocol",
                 "LitJson",
-                "UnityEngine",
+                "BestSects.Net",
             };
         }
 

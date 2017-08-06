@@ -25,6 +25,9 @@ using System.Collections.Generic;
 
 public class Lua2csMessenger
 {
+    public delegate void MsgCallback1(object msg);
+    public delegate void MsgCallback2(object arg0, object arg1);
+    public delegate void MsgCallback3(object arg0, object arg1, object arg2);
     static private Lua2csMessenger m_Instance = null;
     static public Lua2csMessenger Instance
     {
@@ -77,5 +80,42 @@ public class Lua2csMessenger
     public void BroadcastAsync(string eventType, System.Object para1, System.Object para2, System.Object para3)
     {
         Messenger.BroadcastAsync<Object, Object, Object>(eventType, para1, para2, para3);
+    }
+    public void AddListener(string eventType, Callback callback)
+    {
+        Messenger.AddListener(eventType, callback);
+    }
+    public void AddListener1(string eventType, MsgCallback1 callback)
+    {
+        Callback<object> call = (obj) =>
+        {
+            if (callback != null)
+            {
+                callback(obj);
+            }
+        };
+        Messenger.AddListener<object>(eventType, call);
+    }
+    public void AddListener2(string eventType, MsgCallback2 callback)
+    {
+        Callback<object, object> call = (arg0, arg1) =>
+         {
+             if (callback != null)
+             {
+                 callback(arg0, arg1);
+             }
+         };
+        Messenger.AddListener<object, object>(eventType, call);
+    }
+    public void AddListener3(string eventType, MsgCallback3 callback)
+    {
+        Callback<object, object, object> call = (arg0, arg1, arg2) =>
+         {
+             if (callback != null)
+             {
+                 callback(arg0, arg1, arg2);
+             }
+         };
+        Messenger.AddListener<object, object, object>(eventType, call);
     }
 }

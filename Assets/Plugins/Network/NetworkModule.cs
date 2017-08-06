@@ -65,10 +65,12 @@ namespace BestSects.Net
         void OnOpen()
         {
             netState = NetState.Connected;
+            Messenger.BroadcastAsync(MessageID.NetworkConnect.ToString());
         }
         void OnClose()
         {
             netState = NetState.Closed;
+            Messenger.BroadcastAsync(MessageID.NetworkDisconnect.ToString());
         }
 
         public void Reset()
@@ -172,7 +174,8 @@ namespace BestSects.Net
             }
             if (msgData == null)
                 return;
-            Messenger.BroadcastAsync<IMessage>(msgId.ToString(), msgData);
+            //Messenger.BroadcastAsync<IMessage>(msgId.ToString(), msgData);
+            Messenger.BroadcastAsync(msgId.ToString(), (object)msgData);
         }
 
         public override void OnOpen(USocket us)
