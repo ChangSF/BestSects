@@ -100,11 +100,11 @@ namespace BestSects.Net
         }
         public void Send(MessageID msgId, IMessage msg)
         {
-            if (MessageMap.GetMsgType(msgId) != msg.GetType())
-            {
-                Log.Error("消息号和数据不匹配！");
-                return;
-            }
+            //if (MessageMap.GetMsgType(msgId) != msg.GetType())
+            //{
+            //    Log.Error("消息号和数据不匹配！");
+            //    return;
+            //}
             byte[] data = msg.ToByteArray();
             Frame frame = new Frame(data.Length + 4);
             frame.PutShort((short)(data.Length + 2));//写入数据长度
@@ -155,23 +155,7 @@ namespace BestSects.Net
             }
             MessageID msgId = (MessageID)bb.ReadShort();
             byte[] data = bb.ReadBytes(len - 2);
-            IMessage msgData = null;
-            switch (msgId)
-            {
-                case MessageID.ReqUserLogin:
-                case MessageID.ReqUserRegister:
-                    Log.Error("收到请求消息非法!");
-                    return;
-
-                case MessageID.ResUserLogin:
-                    ResUserLoginMessage userLogin = ResUserLoginMessage.Parser.ParseFrom(data);
-                    msgData = userLogin;
-                    break;
-                case MessageID.ResUserRegister:
-                    break;
-                default:
-                    break;
-            }
+            IMessage msgData = MessageMap.GetMessageData(msgId, data);
             if (msgData == null)
                 return;
             //Messenger.BroadcastAsync<IMessage>(msgId.ToString(), msgData);

@@ -13,23 +13,64 @@ namespace BestSects.Net
         NetworkConnect = 0,
         NetworkDisconnect = 1,
 
-        //请求
-        ReqUserLogin = 110,
-        ReqUserRegister = 111,
-        //响应
-        ResUserLogin = 210,
-        ResUserRegister = 211,
+        ////请求
+        //ReqUserLogin = 110,
+        //ReqUserRegister = 111,
+        ////响应
+        //ResUserLogin = 210,
+        //ResUserRegister = 211,
+
+        ReqHeartbeat = 1000,
+        /// <summary> 登录请求 </summary>
+        ReqLogin = 1101,
+        /// <summary> 注册请求 </summary>
+        ReqRegister = 1102,
+        /// <summary> 获取随机名称请求 </summary>
+        ReqRandomName = 1103,
+
+
+
+        ResponseStartIndex = 2000,
+        /// <summary> 登录响应 </summary>
+        ResLogin = ResponseStartIndex+101,
+        /// <summary> 注册响应 </summary>
+        ResRegister = ResponseStartIndex + 102,
+        /// <summary> 获取随机名称响应 </summary>
+        ResRandomName = ResponseStartIndex + 103,
+        /// <summary> 属性变化通知响应 </summary>
+        ResPropertyChange = ResponseStartIndex + 104,
+
     }
 
     public class MessageMap
     {
-        static readonly Dictionary<MessageID, System.Type> map = new Dictionary<MessageID, System.Type>()
+        //static readonly Dictionary<MessageID, System.Type> map = new Dictionary<MessageID, System.Type>()
+        //{
+        //    { MessageID.ReqLogin,typeof( ResLoginMessage) },
+        //};
+        //public static System.Type GetMsgType(MessageID msgId)
+        //{
+        //    return map[msgId];
+        //}
+        public static IMessage GetMessageData(MessageID messageID,byte[] data)
         {
-            { MessageID.ReqUserLogin,typeof( ReqUserLoginMessage) },
-        };
-        public static System.Type GetMsgType(MessageID msgId)
-        {
-            return map[msgId];
+            IMessage msgData = null;
+            switch (messageID)
+            {
+                case MessageID.ResLogin:
+                    ResLoginMessage resLoginMessage = ResLoginMessage.Parser.ParseFrom(data);
+                    msgData = resLoginMessage;
+                    break;
+                case MessageID.ResRegister:
+                    break;
+                case MessageID.ResRandomName:
+                    break;
+                case MessageID.ResPropertyChange:
+                    break;
+                default:
+                    break;
+            }
+            return msgData;
         }
     }
 }

@@ -1,0 +1,16 @@
+syntax = "proto3";
+option java_package = "com.leader.game.protobuf.protocol"; 
+option java_outer_classname = "RoleProtocol";
+option csharp_namespace = "BestSects.protocol";
+
+// 同步请求
+message RoleInfo{
+		int64 id = 1;
+		int64 playerId = 2;
+		int64 sectId = 3;
+		int32 modelId = 4;
+		string name = 5;
+		int32 level = 6;//等级
+		int32 clazz = 7;//修仙等阶
+		string title = 8;//头衔
+}

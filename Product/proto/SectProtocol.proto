@@ -1,0 +1,37 @@
+syntax = "proto3";
+option java_package = "com.leader.game.protobuf.protocol"; 
+option java_outer_classname = "SectProtocol";
+option csharp_namespace = "BestSects.protocol";
+import "RoleProtocol.proto";
+
+// 创建门派请求
+message ReqCreatSectMessage{
+		string name = 1;
+}
+
+// 创建门派响应
+message ResCreatSectMessage{
+		int32 code = 1;
+		SectInfo info = 2;
+}
+
+// 同步请求
+message SectInfo{
+		int64 id = 1;
+		int64 playerId = 2;
+		string name = 3;//门派名称
+		int32 level = 4;//等级
+		int64 exp = 5;//经验
+		int32 prestige = 6;//门派威望
+		int64 gold = 7;//金币
+		int32 diamond = 8;//钻石
+		repeated RoleInfo roles = 9;
+}
+
+//随机昵称请求
+message ReqRandomSectNameMessage{
+}
+
+message ResRandomSectNameMessage{
+		string name = 1;
+}

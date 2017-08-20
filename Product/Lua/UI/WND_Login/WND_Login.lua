@@ -47,10 +47,8 @@ function WND_Login:OnInit(controller)
             if bGetServerList == false then
                 return;
             end
-            self.wndAccount.gameObject:SetActive(false);
-            self.wndRegister.gameObject:SetActive(false);
-            self.wndServerSelect.gameObject:SetActive(true);
-            self:InitServerList();
+            self:Login_LoginServer();
+            
         end)
     end
     if UnityEngine and  UnityEngine.Vector3 then 
@@ -62,11 +60,9 @@ function WND_Login:OnInit(controller)
         end)
     end
     if UnityEngine and  UnityEngine.Vector3 then 
-        self.btnReg.onClick:RemoveAllListeners()
-        self.btnReg.onClick:AddListener(function()
-            self.wndAccount.gameObject:SetActive(false);
-            self.wndRegister.gameObject:SetActive(false);
-            self.wndServerSelect.gameObject:SetActive(true);
+            self.btnReg.onClick:RemoveAllListeners()
+            self.btnReg.onClick:AddListener(function()
+            self:Reg_LoginServer();
         end)
     end
     if UnityEngine and  UnityEngine.Vector3 then 
@@ -92,11 +88,14 @@ function WND_Login:OnOpen()
     end);
 	print(MessageID.NetworkConnect);
 	print()
-    Lua2csMessenger.Instance:AddListener1("ResUserLogin", function(data)
+    Lua2csMessenger.Instance:AddListener1("ResLogin", function(data)
         -- ResUserLoginMessage response = data as ResUserLoginMessage;
-        Log.Error("登录结果=> ".. data.Msg);
-        UIModule.Instance:CloseWindow("WND_Login")
-        UIModule.Instance:OpenWindow("WND_Introduce","user1")
+        Log.Error("登录结果=> ".. data.code);
+        if data.code == 0 then
+            Cookie.Set("CurrentPlayerInfo",data.playerInfo);
+            UIModule.Instance:CloseWindow("WND_Login");
+            UIModule.Instance:OpenWindow("WND_Introduce","user1");
+        end
     end);
     local c=coroutine.create(function()
         Yield(WaitForSeconds(2));
@@ -104,30 +103,110 @@ function WND_Login:OnOpen()
         Yield(www)
         local  reader = JsonReader(www.text);
         local data = JsonMapper.ToObject(reader);
-        local x = tonumber( data.Count);
+        --{"login":{"ip":"47.94.220.1","port":1588},"game":[{"server":1,"ip":"47.94.220.1","port":9001}]}
+        self.loginServer = {};
+        local LoginServerData = data:getItem("login");
+        self.loginServer.ip=LoginServerData:getItem("ip"):ToString();
+        self.loginServer.port=LoginServerData:getItem("port"):ToString();
+        local gameServerList = {};
+        local serverListData= data:getItem("game");
+        local x = tonumber( serverListData.Count);
         for i=1,x do
-            local item = data:getItem(i-1);
+            local item = serverListData:getItem(i-1);
             serverlist[i]={};
             serverlist[i].server=item:getItem("server"):ToString();
             serverlist[i].ip=item:getItem("ip"):ToString();
             serverlist[i].port=item:getItem("port"):ToString();
+            serverlist[i].name=item:getItem("name"):ToString();
             Log.Error(item:getItem("ip"):ToString());
             bGetServerList=true;
         end
         -------------
-        for i=2,10 do
-            local item = data:getItem(0);
-            serverlist[i]={};
-            serverlist[i].server=tostring(i);
-            serverlist[i].ip=item:getItem("ip"):ToString();
-            serverlist[i].port=item:getItem("port"):ToString();
-            bGetServerList=true;
-        end
+        -- for i=2,10 do
+        --     local item = serverListData:getItem(0);
+        --     serverlist[i]={};
+        --     serverlist[i].server=tostring(i);
+        --     serverlist[i].ip=item:getItem("ip"):ToString();
+        --     serverlist[i].port=item:getItem("port"):ToString();
+        --     bGetServerList=true;
+        -- end
         ----------------------
-    end)
+    end);
     coroutine.resume(c);
 end
 
+function WND_Login:Login_LoginServer()
+    if self.inputAccount.text =="" and self.inputPassword.text=="" then
+        return;
+    end
+    local d=coroutine.create(function()
+    --去登录服登录
+        local url = "http://"..self.loginServer.ip..":"..self.loginServer.port.."/loGIN?UsERnaME="..self.inputAccount.text.."&pASsWOrD="..self.inputPassword.text;
+        Debug.LogError(url);
+        local www = WWW(url);
+        Yield(www);
+        ------------------
+        --{"code":0,"roles":[{"uid":"111","level":1,"sex":1,"nickname":"小明","serverID":1}],"token":"54658079ec552aa802d6037d28bf57e3"}
+        Debug.LogError(www.text);
+        if www.error==nil or www.error == "" then
+            self.username=self.inputAccount.text;
+            self.password=self.inputPassword.text;
+            self:ProcessLoginServerData(www.text);
+        else
+            Log.error("网络出错,无法访问登录服务器!");
+        end
+    end);
+    coroutine.resume(d);
+end
+function WND_Login:Reg_LoginServer()
+    local account = self.regAccount.text;
+    local password = self.regPassword.text;
+    local password2 = self.regPassword2.text;
+    if password ~= password2 then
+        Log.Error("两次输入的密码不正确!");
+        return;
+    end
+    local e=coroutine.create(function()
+        local www = WWW("http://"..self.loginServer.ip..":"..self.loginServer.port.."/rEgIsTER?USerNAmE="..self.regAccount.text.."&PAsSWoRD="..self.regPassword.text);
+        Yield(www);
+        if www.error == "" then
+            self.username=self.regAccount.text;
+            self.password=self.regPassword.text;
+            self:ProcessLoginServerData(www.text);
+        else
+            Log.error("网络出错,无法访问登录服务器!");
+        end
+    end);
+    coroutine.resume(e);
+end
+function WND_Login:ProcessLoginServerData(jsonText)
+    local  reader = JsonReader(jsonText);
+    local data = JsonMapper.ToObject(reader);
+    local code = data:getItem("code");
+    if tonumber(code:ToString()) == 0 then
+        self.roles={};
+        local roles = data:getItem("roles");
+        local x = tonumber(roles.Count);
+        for i=1,x do
+            self.roles[i]={};
+            local role = roles:getItem(i-1);
+            self.roles[i].level = role:getItem("level");
+            self.roles[i].nickname=role:getItem("nickname");
+            self.roles[i].serverID = role:getItem("serverID");
+            self.roles[i].sex = role:getItem("sex");
+            self.roles[i].uid=role:getItem("uid");
+        end
+        self.token=data:getItem("token");
+        Cookie.Set("token",self.token);
+        Cookie.Set("roles",self.roles);
+        self.wndAccount.gameObject:SetActive(false);
+        self.wndRegister.gameObject:SetActive(false);
+        self.wndServerSelect.gameObject:SetActive(true);
+        self:InitServerList();
+    else
+        Log.Error("error code => ".. tostring( code));
+    end
+end
 function  WND_Login:InitServerList()
     local x = 1;
     for k,v in pairs(serverlist) do
@@ -165,7 +244,7 @@ function WND_Login:InitServerItem(itemTrans,itemData)
     end
     serverNum.text=itemData.server;
     serverState.gameObject:SetActive(false);
-    serverName.text=itemData.ip;
+    serverName.text=itemData.name;
     local btnState = selectState:GetComponent("Button");
     local index = tonumber(itemTrans.name);
     btnState.onClick:RemoveAllListeners()
@@ -185,10 +264,13 @@ function WND_Login:ConnectServer()
 end
 
 function WND_Login:LoginServer()
-    local msg = ReqUserLoginMessage();
-    msg.Username = "abc";
-    msg.Password = "123";
-    NetworkModule.Instance:Send(MessageID.ReqUserLogin,msg);
+    local msg = ReqLoginMessage();
+    Log.Error("z =>"..tostring(self.token));
+    msg.Token =tostring(self.token);--登录令牌
+    msg.Username = self.username;--帐号
+    msg.Channel = 0;--玩家渠道
+    msg.DeviceId = "abcdef";--设备号
+    NetworkModule.Instance:Send(MessageID.ReqLogin,msg);
 end
 
 return WND_Login
