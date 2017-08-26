@@ -1,8 +1,10 @@
 
 -- global variables / functions
+--local zb = "D:\\Software\\ZeroBrane\\"
+--package.path = package.path .. ";" .. zb .. "lualibs\\?\\?.lua;" .. zb .. "lualibs\\?.lua;"
+--package.cpath = package.cpath .. ";" .. zb .. "bin\\?.dll;" .. zb .. "bin\\clibs\\?.dll;"
 
-
-
+--import("mobdebug").start();
 -- simple class extends
 function extends(class, base)
     base.__index = base

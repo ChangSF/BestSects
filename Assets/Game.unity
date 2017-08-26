@@ -342,6 +342,8 @@ MonoBehaviour:
   bg: {fileID: 1429656767}
   progress: {fileID: 1006830336}
   slider: {fileID: 1555173806}
+  tips: {fileID: 1018272916}
+  url: http://47.94.220.1/serverlist.html
 --- !u!114 &939895866
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1042,44 +1044,3 @@ CanvasRenderer:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1622874705}
---- !u!1 &2066061938
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 2066061940}
-  - component: {fileID: 2066061939}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2066061939
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2066061938}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e272b5815c995a247a108243fae4eac8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  url: http://47.94.220.1/serverlist.html
---- !u!4 &2066061940
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2066061938}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 952.96906, y: 495.93506, z: 113.75}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

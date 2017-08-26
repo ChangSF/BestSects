@@ -49,6 +49,7 @@ namespace AppSettings
                     _settingsList = new IReloadableSettings[]
                     { 
                         AudioConfigSettings._instance,
+                        ErrorCodeSettings._instance,
                         TestSettings._instance,
                         GameConfigSettings._instance,
                     };
@@ -277,6 +278,217 @@ namespace AppSettings
             Id = row.Get_string(row.Values[0], ""); 
             FileName = row.Get_string(row.Values[1], ""); 
             AudioType = row.Get_string(row.Values[2], ""); 
+        }
+
+        /// <summary>
+        /// Get PrimaryKey from a table row
+        /// </summary>
+        /// <param name="row"></param>
+        /// <returns></returns>
+        public static string ParsePrimaryKey(TableFileRow row)
+        {
+            var primaryKey = row.Get_string(row.Values[0], "");
+            return primaryKey;
+        }
+	}
+
+	/// <summary>
+	/// Auto Generate for Tab File: "ErrorCode.k"
+    /// No use of generic and reflection, for better performance,  less IL code generating
+	/// </summary>>
+    public partial class ErrorCodeSettings : IReloadableSettings
+    {
+        /// <summary>
+        /// How many reload function load?
+        /// </summary>>
+        public static int ReloadCount { get; private set; }
+
+		public static readonly string[] TabFilePaths = 
+        {
+            "ErrorCode.k"
+        };
+        internal static ErrorCodeSettings _instance = new ErrorCodeSettings();
+        Dictionary<string, ErrorCodeSetting> _dict = new Dictionary<string, ErrorCodeSetting>();
+
+        /// <summary>
+        /// Trigger delegate when reload the Settings
+        /// </summary>>
+	    public static System.Action OnReload;
+
+        /// <summary>
+        /// Constructor, just reload(init)
+        /// When Unity Editor mode, will watch the file modification and auto reload
+        /// </summary>
+	    private ErrorCodeSettings()
+	    {
+        }
+
+        /// <summary>
+        /// Get the singleton
+        /// </summary>
+        /// <returns></returns>
+	    public static ErrorCodeSettings GetInstance()
+	    {
+            if (ReloadCount == 0)
+            {
+                _instance._ReloadAll(true);
+    #if UNITY_EDITOR
+                if (SettingModule.IsFileSystemMode)
+                {
+                    for (var j = 0; j < TabFilePaths.Length; j++)
+                    {
+                        var tabFilePath = TabFilePaths[j];
+                        SettingModule.WatchSetting(tabFilePath, (path) =>
+                        {
+                            if (path.Replace("\\", "/").EndsWith(path))
+                            {
+                                _instance.ReloadAll();
+                                Log.LogConsole_MultiThread("File Watcher! Reload success! -> " + path);
+                            }
+                        });
+                    }
+
+                }
+    #endif
+            }
+
+	        return _instance;
+	    }
+        
+        public int Count
+        {
+            get
+            {
+                return _dict.Count;
+            }
+        }
+
+        /// <summary>
+        /// Do reload the setting file: ErrorCode, no exception when duplicate primary key
+        /// </summary>
+        public void ReloadAll()
+        {
+            _ReloadAll(false);
+        }
+
+        /// <summary>
+        /// Do reload the setting class : ErrorCode, no exception when duplicate primary key, use custom string content
+        /// </summary>
+        public void ReloadAllWithString(string context)
+        {
+            _ReloadAll(false, context);
+        }
+
+        /// <summary>
+        /// Do reload the setting file: ErrorCode
+        /// </summary>
+	    void _ReloadAll(bool throwWhenDuplicatePrimaryKey, string customContent = null)
+        {
+            for (var j = 0; j < TabFilePaths.Length; j++)
+            {
+                var tabFilePath = TabFilePaths[j];
+                TableFile tableFile;
+                if (customContent == null)
+                    tableFile = SettingModule.Get(tabFilePath, false);
+                else
+                    tableFile = TableFile.LoadFromString(customContent);
+
+                using (tableFile)
+                {
+                    foreach (var row in tableFile)
+                    {
+                        var pk = ErrorCodeSetting.ParsePrimaryKey(row);
+                        ErrorCodeSetting setting;
+                        if (!_dict.TryGetValue(pk, out setting))
+                        {
+                            setting = new ErrorCodeSetting(row);
+                            _dict[setting.Id] = setting;
+                        }
+                        else 
+                        {
+                            if (throwWhenDuplicatePrimaryKey) throw new System.Exception(string.Format("DuplicateKey, Class: {0}, File: {1}, Key: {2}", this.GetType().Name, tabFilePath, pk));
+                            else setting.Reload(row);
+                        }
+                    }
+                }
+            }
+
+	        if (OnReload != null)
+	        {
+	            OnReload();
+	        }
+
+            ReloadCount++;
+            Log.Info("Reload settings: {0}, Row Count: {1}, Reload Count: {2}", GetType(), Count, ReloadCount);
+        }
+
+	    /// <summary>
+        /// foreachable enumerable: ErrorCode
+        /// </summary>
+        public static IEnumerable GetAll()
+        {
+            foreach (var row in GetInstance()._dict.Values)
+            {
+                yield return row;
+            }
+        }
+
+        /// <summary>
+        /// GetEnumerator for `MoveNext`: ErrorCode
+        /// </summary> 
+	    public static IEnumerator GetEnumerator()
+	    {
+	        return GetInstance()._dict.Values.GetEnumerator();
+	    }
+         
+	    /// <summary>
+        /// Get class by primary key: ErrorCode
+        /// </summary>
+        public static ErrorCodeSetting Get(string primaryKey)
+        {
+            ErrorCodeSetting setting;
+            if (GetInstance()._dict.TryGetValue(primaryKey, out setting)) return setting;
+            return null;
+        }
+
+        // ========= CustomExtraString begin ===========
+        
+        // ========= CustomExtraString end ===========
+    }
+
+	/// <summary>
+	/// Auto Generate for Tab File: "ErrorCode.k"
+    /// Singleton class for less memory use
+	/// </summary>
+	public partial class ErrorCodeSetting : TableRowFieldParser
+	{
+		
+        /// <summary>
+        /// ID Column/编号/主键
+        /// </summary>
+        public string Id { get; private set;}
+        
+        /// <summary>
+        /// Name/错误信息
+        /// </summary>
+        public string Name { get; private set;}
+        
+        /// <summary>
+        /// Text/提示信息
+        /// </summary>
+        public string Text { get; private set;}
+        
+
+        internal ErrorCodeSetting(TableFileRow row)
+        {
+            Reload(row);
+        }
+
+        internal void Reload(TableFileRow row)
+        { 
+            Id = row.Get_string(row.Values[0], ""); 
+            Name = row.Get_string(row.Values[1], ""); 
+            Text = row.Get_string(row.Values[2], ""); 
         }
 
         /// <summary>

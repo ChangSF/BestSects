@@ -87,52 +87,75 @@ function WND_Login:OnOpen()
 
     end);
 	print(MessageID.NetworkConnect);
-	print()
     Lua2csMessenger.Instance:AddListener1("ResLogin", function(data)
         -- ResUserLoginMessage response = data as ResUserLoginMessage;
-        Log.Error("登录结果=> ".. data.code);
-        if data.code == 0 then
-            Cookie.Set("CurrentPlayerInfo",data.playerInfo);
+        Log.Error("登录结果=> ".. data.Code);
+        if data.Code == 0 then
+            Cookie.Set("CurrentPlayerInfo",data.PlayerInfo);
             UIModule.Instance:CloseWindow("WND_Login");
             UIModule.Instance:OpenWindow("WND_Introduce","user1");
         end
     end);
-    local c=coroutine.create(function()
-        Yield(WaitForSeconds(2));
-        local www = WWW("http://47.94.220.1/serverlist.html")
-        Yield(www)
-        local  reader = JsonReader(www.text);
-        local data = JsonMapper.ToObject(reader);
-        --{"login":{"ip":"47.94.220.1","port":1588},"game":[{"server":1,"ip":"47.94.220.1","port":9001}]}
-        self.loginServer = {};
-        local LoginServerData = data:getItem("login");
-        self.loginServer.ip=LoginServerData:getItem("ip"):ToString();
-        self.loginServer.port=LoginServerData:getItem("port"):ToString();
-        local gameServerList = {};
-        local serverListData= data:getItem("game");
-        local x = tonumber( serverListData.Count);
-        for i=1,x do
-            local item = serverListData:getItem(i-1);
-            serverlist[i]={};
-            serverlist[i].server=item:getItem("server"):ToString();
-            serverlist[i].ip=item:getItem("ip"):ToString();
-            serverlist[i].port=item:getItem("port"):ToString();
-            serverlist[i].name=item:getItem("name"):ToString();
-            Log.Error(item:getItem("ip"):ToString());
-            bGetServerList=true;
-        end
-        -------------
-        -- for i=2,10 do
-        --     local item = serverListData:getItem(0);
-        --     serverlist[i]={};
-        --     serverlist[i].server=tostring(i);
-        --     serverlist[i].ip=item:getItem("ip"):ToString();
-        --     serverlist[i].port=item:getItem("port"):ToString();
-        --     bGetServerList=true;
-        -- end
-        ----------------------
+    --local c=coroutine.create(function()
+    --    Yield(WaitForSeconds(2));
+    --    local www = WWW(WND_Login.serverListUrl);
+    --    Yield(www)
+    --    local  reader = JsonReader(www.text);
+    --    local data = JsonMapper.ToObject(reader);
+    --    --{"login":{"ip":"47.94.220.1","port":1588},"game":[{"server":1,"ip":"47.94.220.1","port":9001}]}
+    --    self.loginServer = {};
+    --    local LoginServerData = data:getItem("login");
+    --    self.loginServer.ip=LoginServerData:getItem("ip"):ToString();
+    --    self.loginServer.port=LoginServerData:getItem("port"):ToString();
+    --    local gameServerList = {};
+    --    local serverListData= data:getItem("game");
+    --    local x = tonumber( serverListData.Count);
+    --    for i=1,x do
+    --        local item = serverListData:getItem(i-1);
+    --        serverlist[i]={};
+    --        serverlist[i].server=item:getItem("server"):ToString();
+    --        serverlist[i].ip=item:getItem("ip"):ToString();
+    --        serverlist[i].port=item:getItem("port"):ToString();
+    --        serverlist[i].name=item:getItem("name"):ToString();
+    --        Log.Error(item:getItem("ip"):ToString());
+    --        bGetServerList=true;
+    --    end
+    --    -------------
+    --    -- for i=2,10 do
+    --    --     local item = serverListData:getItem(0);
+    --    --     serverlist[i]={};
+    --    --     serverlist[i].server=tostring(i);
+    --    --     serverlist[i].ip=item:getItem("ip"):ToString();
+    --    --     serverlist[i].port=item:getItem("port"):ToString();
+    --    --     bGetServerList=true;
+    --    -- end
+    --    ----------------------
+    --end);
+    --coroutine.resume(c);
+    local serverListJson = Cookie.Get("serverListJson",function()
+        Log.Error("无法获取到服务器列表!");
     end);
-    coroutine.resume(c);
+    Debug.LogError(tostring(serverListJson));
+    local  reader = JsonReader(serverListJson);
+    local data = JsonMapper.ToObject(reader);
+    --{"login":{"ip":"47.94.220.1","port":1588},"game":[{"server":1,"ip":"47.94.220.1","port":9001}]}
+    self.loginServer = {};
+    local LoginServerData = data:getItem("login");
+    self.loginServer.ip=LoginServerData:getItem("ip"):ToString();
+    self.loginServer.port=LoginServerData:getItem("port"):ToString();
+    local gameServerList = {};
+    local serverListData= data:getItem("game");
+    local x = tonumber( serverListData.Count);
+    for i=1,x do
+        local item = serverListData:getItem(i-1);
+        serverlist[i]={};
+        serverlist[i].server=item:getItem("server"):ToString();
+        serverlist[i].ip=item:getItem("ip"):ToString();
+        serverlist[i].port=item:getItem("port"):ToString();
+        serverlist[i].name=item:getItem("name"):ToString();
+        Log.Error(item:getItem("ip"):ToString());
+        bGetServerList=true;
+    end
 end
 
 function WND_Login:Login_LoginServer()
@@ -167,14 +190,16 @@ function WND_Login:Reg_LoginServer()
         return;
     end
     local e=coroutine.create(function()
-        local www = WWW("http://"..self.loginServer.ip..":"..self.loginServer.port.."/rEgIsTER?USerNAmE="..self.regAccount.text.."&PAsSWoRD="..self.regPassword.text);
+        local url="http://"..self.loginServer.ip..":"..self.loginServer.port.."/rEgIsTER?USerNAmE="..self.regAccount.text.."&PAsSWoRD="..self.regPassword.text;
+        Debug.LogError(url);
+        local www = WWW(url);
         Yield(www);
-        if www.error == "" then
+        if www.error== nil or www.error == "" then
             self.username=self.regAccount.text;
             self.password=self.regPassword.text;
             self:ProcessLoginServerData(www.text);
         else
-            Log.error("网络出错,无法访问登录服务器!");
+            Log.Error(www.error);
         end
     end);
     coroutine.resume(e);
@@ -183,10 +208,12 @@ function WND_Login:ProcessLoginServerData(jsonText)
     local  reader = JsonReader(jsonText);
     local data = JsonMapper.ToObject(reader);
     local code = data:getItem("code");
+    --Debug.LogError("Code => "..tostring( tonumber(code:ToString())))
     if tonumber(code:ToString()) == 0 then
         self.roles={};
-        local roles = data:getItem("roles");
+        local roles=data:getItem("roles");
         local x = tonumber(roles.Count);
+        Debug.LogError("roles => "..tostring( tonumber(roles.Count)))
         for i=1,x do
             self.roles[i]={};
             local role = roles:getItem(i-1);
@@ -260,7 +287,7 @@ end
 
 function WND_Login:ConnectServer()
 --    NetworkModule.Instance:Connect(serverlist[selectedIndex].ip, tonumber(serverlist[selectedIndex].port));
-	NetworkModule.Instance:Connect(serverlist[selectedIndex].ip, 1520);
+	NetworkModule.Instance:Connect(serverlist[selectedIndex].ip, tonumber( serverlist[selectedIndex].port));
 end
 
 function WND_Login:LoginServer()

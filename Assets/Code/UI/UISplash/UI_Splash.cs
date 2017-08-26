@@ -13,17 +13,19 @@ public class UI_Splash : UIController
     public Image bg;
     public Text progress;
     public Slider slider;
-
+    public Text tips;
+    public string url = @"http://47.94.220.1/serverlist.html";
     float currentProgress;
     Tweener tweener;
+    bool bGetServerList = false;
     // Use this for initialization
     void Start()
     {
         currentProgress = 0f;
-        //http://47.94.220.1/serverlist.html
         slider.value = 0f;
         tweener = slider.DOValue(currentProgress, 0.5f);
-
+        tips.text = url;
+        StartCoroutine(GetServerList());
     }
 
     // Update is called once per frame
@@ -32,7 +34,7 @@ public class UI_Splash : UIController
         progress.text = Game.Instance.LuaModule.InitProgress.ToString();
         currentProgress = (float)Game.Instance.LuaModule.InitProgress / 100f;
         tweener.ChangeStartValue(slider.value).ChangeEndValue(currentProgress, 0.5f).PlayForward();
-        if (currentProgress == 1f)
+        if (Game.Instance.LuaModule.InitProgress >= 100 && bGetServerList)
         {
             UIModule.Instance.OpenWindow(wndName, args);
             Destroy(gameObject);
@@ -53,4 +55,28 @@ public class UI_Splash : UIController
     {
         Debug.LogError("OnOpen");
     }
+
+    IEnumerator GetServerList()
+    {
+        while (!bGetServerList)
+        {
+            WWW www = new WWW(url);
+            yield return www;
+            if (!string.IsNullOrEmpty(www.error))
+            {
+                tips.text = "网络异常!请检查网络后重试(3)!";
+                yield return new WaitForSecondsRealtime(1f);
+                tips.text = "网络异常!请检查网络后重试(2)!";
+                yield return new WaitForSecondsRealtime(1f);
+                tips.text = "网络异常!请检查网络后重试(1)!";
+                yield return new WaitForSecondsRealtime(1f);
+                tips.text = "网络异常!正在重试!";
+                continue;
+            }
+            Cookie.Set("serverListJson", www.text);
+            bGetServerList = true;
+            tips.text = "网络正常!";
+        }
+    }
+
 }

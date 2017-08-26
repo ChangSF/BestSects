@@ -26,7 +26,7 @@ namespace KSFramework
         /// <summary>
         /// Store Getters, of key
         /// </summary>
-        protected static Dictionary<string, CookieGetter> _getters = new Dictionary<string, CookieGetter>(); 
+        protected static Dictionary<string, CookieGetter> _getters = new Dictionary<string, CookieGetter>();
 
         /// <summary>
         /// Store setters
@@ -126,8 +126,9 @@ namespace KSFramework
             }
             object value;
             if (_hashtable.ContainsKey(key))
-                value =_hashtable[key];
-            value = null;
+                value = _hashtable[key];
+            else
+                value = null;
             return getter(value);
         }
 

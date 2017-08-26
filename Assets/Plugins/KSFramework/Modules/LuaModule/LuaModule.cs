@@ -57,7 +57,7 @@ namespace KSFramework
         /// 该值调用频繁，就不放ini了
         /// </summary>
         public static bool CacheMode = false;
-
+        public Action OnInitComplete;
         /// <summary>
         /// Import result object caching
         /// </summary>
@@ -69,7 +69,7 @@ namespace KSFramework
             UnityEngine.Debug.Log("Consturct LuaModule...");
 #endif
             _luaSvr = new LuaSvr();
-            _luaSvr.init(progress => { _initProgress = progress; }, () => { }, LuaSvrFlag.LSF_BASIC/* | LuaSvrFlag.LSF_EXTLIB | LuaSvrFlag.LSF_3RDDLL*/);
+            _luaSvr.init(progress => { _initProgress = progress; }, () => { if (OnInitComplete != null) OnInitComplete(); }, LuaSvrFlag.LSF_BASIC/* | LuaSvrFlag.LSF_EXTLIB | LuaSvrFlag.LSF_3RDDLL*/);
         }
 
         /// <summary>

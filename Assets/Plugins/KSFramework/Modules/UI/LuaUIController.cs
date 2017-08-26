@@ -117,6 +117,15 @@ namespace KSFramework
         /// </summary>
         bool CheckInitScript(bool showWarn = false)
         {
+            if (LuaModule.Instance.IsInited == false)
+                return false;
+            if (this.gameObject.GetComponent<CSUIController>())
+            {
+                if (this.gameObject.GetComponent<CSUIController>().useLuaFirst)
+                    Destroy(this.gameObject.GetComponent<CSUIController>());
+                else
+                    return false;
+            }
             if (!IsCachedLuaTable)
             {
                 ClearLuaTableCache();
@@ -132,14 +141,7 @@ namespace KSFramework
                     Log.LogWarning("Import UI Lua Script failed: {0}", relPath);
                 return false;
             }
-            //存在lua脚本，那么优先使用lua
-            if (this.gameObject.GetComponent<CSUIController>())
-            {
-                if (this.gameObject.GetComponent<CSUIController>().useLuaFirst)
-                    Destroy(this.gameObject.GetComponent<CSUIController>());
-                else
-                    return false;
-            }
+            
             scriptResult = KSGame.Instance.LuaModule.CallScript(relPath);
             Debuger.Assert(scriptResult is LuaTable, "{0} Script Must Return Lua Table with functions!", UITemplateName);
 
@@ -196,6 +198,7 @@ namespace KSFramework
 
 
             var luaInitObj = _luaTable["OnInit"];
+            Debug.LogError("初始化");
             Debuger.Assert(luaInitObj is LuaFunction, "Must have OnInit function - {0}", UIName);
 
             // set table variable `Controller` to this

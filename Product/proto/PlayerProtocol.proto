@@ -36,9 +36,8 @@ message ReqRegisterMessage{
 		string nickname = 1;//昵称
 		string icon = 2;//头像
 		int32 sex = 3;//性别
-		int32 level = 4;//等级
-		int32 channel = 5;//玩家渠道
-		string deviceId = 6;//设备号
+		int32 channel = 4;//玩家渠道
+		string deviceId = 5;//设备号
 }
 
 //玩家注册响应
