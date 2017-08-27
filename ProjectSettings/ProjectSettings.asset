@@ -6,7 +6,7 @@ PlayerSettings:
   serializedVersion: 11
   productGUID: 7fc518c829a9ffa4a903a89607a803cc
   AndroidProfiler: 0
-  defaultScreenOrientation: 4
+  defaultScreenOrientation: 3
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
@@ -142,7 +142,7 @@ PlayerSettings:
     Android: com.csf.BestSects
     Standalone: unity.DefaultCompany.KSFramework
     Tizen: com.github.KSFramework
-    iOS: com.github.KSFramework
+    iOS: com.csf.BestSects
     tvOS: com.github.KSFramework
   buildNumber:
     iOS: 0
