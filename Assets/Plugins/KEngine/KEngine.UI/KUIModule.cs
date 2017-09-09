@@ -419,7 +419,7 @@ namespace KEngine.UI
         /// Hot reload a ui asset bundle
         /// </summary>
         /// <param name="uiTemplateName"></param>
-        public Coroutine ReloadWindow(string windowTemplateName, KCallback callback)
+        public UnityEngine.Coroutine ReloadWindow(string windowTemplateName, KCallback callback)
         {
             UILoadState uiState;
             UIWindows.TryGetValue(windowTemplateName, out uiState);

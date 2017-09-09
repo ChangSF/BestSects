@@ -28,13 +28,29 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using KEngine;
+
+#if SLUA
 using SLua;
+using LuaInterface;
+using LuaTypes = LuaInterface.LuaTypes;
+#else
+using XLua;
+
+
+#endif
 
 namespace KSFramework
 {
+#if !SLUA
+    [LuaCallCSharp]
+#endif
     public class LuaModule : IModuleInitable
     {
+#if SLUA
         private readonly LuaSvr _luaSvr;
+#else
+        private readonly LuaEnv _luaEnv;
+#endif
 
         public static LuaModule Instance = new LuaModule();
 
@@ -42,22 +58,24 @@ namespace KSFramework
 
         private double _initProgress = 0;
 
-        public double InitProgress { get { return _initProgress; } }
+        public double InitProgress { get { return _initProgress; }}
 
+#if SLUA
         public LuaState State
         {
             get { return _luaSvr.luaState; }
         }
+#endif
 
-        /// <summary>
-        /// 是否开启缓存模式，默认true，首次执行将把执行结果table存起来；在非缓存模式下，也可以通过编辑器的Reload来进行强制刷新缓存
-        /// 对实时性重载要求高的，可以把开关设置成false，长期都进行Lua脚本重载，理论上会消耗额外的性能用于语法解析
-        /// 
-        /// 一般的脚本语言，如Python, NodeJS中，其import, require关键字都会对加载过的模块进行缓存(包括Lua原生的require)；如果不缓存，要注意状态的保存问题
-        /// 该值调用频繁，就不放ini了
-        /// </summary>
+		/// <summary>
+		/// 是否开启缓存模式，默认true，首次执行将把执行结果table存起来；在非缓存模式下，也可以通过编辑器的Reload来进行强制刷新缓存
+		/// 对实时性重载要求高的，可以把开关设置成false，长期都进行Lua脚本重载，理论上会消耗额外的性能用于语法解析
+		/// 
+		/// 一般的脚本语言，如Python, NodeJS中，其import, require关键字都会对加载过的模块进行缓存(包括Lua原生的require)；如果不缓存，要注意状态的保存问题
+		/// 该值调用频繁，就不放ini了
+		/// </summary>
         public static bool CacheMode = false;
-        public Action OnInitComplete;
+
         /// <summary>
         /// Import result object caching
         /// </summary>
@@ -68,8 +86,13 @@ namespace KSFramework
 #if UNITY_EDITOR
             UnityEngine.Debug.Log("Consturct LuaModule...");
 #endif
+
+#if SLUA
             _luaSvr = new LuaSvr();
-            _luaSvr.init(progress => { _initProgress = progress; }, () => { if (OnInitComplete != null) OnInitComplete(); }, LuaSvrFlag.LSF_BASIC/* | LuaSvrFlag.LSF_EXTLIB | LuaSvrFlag.LSF_3RDDLL*/);
+            _luaSvr.init(progress => { _initProgress = progress; }, () => { });
+#else
+            _luaEnv = new LuaEnv();
+#endif
         }
 
         /// <summary>
@@ -80,7 +103,21 @@ namespace KSFramework
         /// <returns></returns>
         public bool ExecuteScript(byte[] scriptCode, out object ret)
         {
+#if SLUA
             return _luaSvr.luaState.doBuffer(scriptCode, Encoding.UTF8.GetString(scriptCode), out ret);
+#else
+            var results = _luaEnv.DoString(Encoding.UTF8.GetString(scriptCode), "code");
+
+            if (results != null && results.Length == 1)
+            {
+                ret = results[0];
+            }
+            else
+            {
+                ret = results;
+            }
+            return true;
+#endif
         }
 
         /// <summary>
@@ -100,18 +137,31 @@ namespace KSFramework
         /// 
         /// We don't recommend use this method, please use ImportScript which has Caching!
         /// </summary>
-        /// <param name="scriptRelativePath"></param>
+        /// <param name="path"></param>
         /// <returns></returns>
-        public object CallScript(string scriptRelativePath)
+        public object CallScript(string path)
         {
-            Debuger.Assert(HasScript(scriptRelativePath), "Not exist Lua: " + scriptRelativePath);
-
-            var scriptPath = GetScriptPath(scriptRelativePath);
+            var scriptPath = GetScriptPath(path);
             byte[] script;
-            if (Log.IsUnityEditor)
-                script = File.ReadAllBytes(scriptPath);
-            else
-                script = KResourceModule.LoadSyncFromStreamingAssets(scriptPath);
+#if !UNITY_EDITOR
+            HotBytesLoader loader = null;
+            try
+            {
+                loader = HotBytesLoader.Load(scriptPath, LoaderMode.Sync);
+                Debuger.Assert(!loader.IsError, "Something wrong or Not exist Lua: " + scriptPath);
+                script = loader.Bytes;
+            }
+            finally
+            {
+                if (loader != null)
+                    loader.Release();
+            }
+#else
+            //if (Log.IsUnityEditor)
+            script = File.ReadAllBytes("Product/"+scriptPath);
+            //else
+            //    script = KResourceModule.LoadSyncFromStreamingAssets(scriptPath);
+#endif
             var ret = ExecuteScript(script);
             return ret;
         }
@@ -128,15 +178,16 @@ namespace KSFramework
 
             var relativePath = string.Format("{0}/{1}.lua", luaPath, scriptRelativePath);
 
-            if (Log.IsUnityEditor)
-            {
-                var editorLuaScriptPath = Path.Combine(KResourceModule.EditorProductFullPath,
-                    relativePath);
+            //if (Log.IsUnityEditor)
+            //{
+            //    var editorLuaScriptPath = Path.Combine(KResourceModule.EditorProductFullPath,
+            //        relativePath);
 
-                return editorLuaScriptPath;
-            }
+            //    return editorLuaScriptPath;
+            //}
 
-            relativePath += ext;
+            if (!Log.IsUnityEditor)
+                relativePath += ext;
             return relativePath;
         }
 
@@ -161,8 +212,8 @@ namespace KSFramework
         /// <returns></returns>
         public object Import(string fileName)
         {
-            if (!HasScript(fileName))
-                throw new FileNotFoundException(string.Format("Not found UI Lua Script: {0}", fileName));
+//			if (!HasScript (fileName))
+//                throw new FileNotFoundException(string.Format("Not found UI Lua Script: {0}", fileName));
 
             return DoImportScript(fileName);
         }
@@ -175,10 +226,10 @@ namespace KSFramework
         /// <returns></returns>
         public bool TryImport(string fileName, out object result)
         {
-            result = null;
+//            result = null;
 
-            if (!HasScript(fileName))
-                return false;
+//            if (!HasScript(fileName))
+//                return false;
 
             result = DoImportScript(fileName);
             return true;
@@ -218,6 +269,7 @@ namespace KSFramework
 
         public IEnumerator Init()
         {
+#if SLUA
             int frameCount = 0;
             while (!_luaSvr.inited)
             {
@@ -226,7 +278,6 @@ namespace KSFramework
                 yield return null;
                 frameCount++;
             }
-
             var L = _luaSvr.luaState.L;
             LuaDLL.lua_pushcfunction(L, LuaImport);
             LuaDLL.lua_setglobal(L, "import");
@@ -234,40 +285,47 @@ namespace KSFramework
             LuaDLL.lua_setglobal(L, "using"); // same as SLua's import, using namespace
             LuaDLL.lua_pushcfunction(L, ImportCSharpType);
             LuaDLL.lua_setglobal(L, "import_type"); // same as SLua's SLua.GetClass(), import C# type
+#else
+            yield return null;
+#endif
+
             CallScript("Init");
 
             IsInited = true;
+            _initProgress = 1f;
         }
 
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static public int ImportCSharpType(IntPtr l)
-        {
-            try
-            {
-                string cls;
-                Helper.checkType(l, 1, out cls);
-                Type t = LuaObject.FindType(cls);
-                if (t == null)
-                {
-                    return Helper.error(l, "Can't find {0} to create", cls);
-                }
 
-                LuaClassObject co = new LuaClassObject(t);
-                LuaObject.pushObject(l, co);
-                Helper.pushValue(l, true);
-                return 2;
-            }
-            catch (Exception e)
-            {
-                return Helper.error(l, e);
-            }
-        }
+#if SLUA
+		[LuaInterface.MonoPInvokeCallback(typeof(LuaCSFunction))]
+		static public int ImportCSharpType(IntPtr l)
+		{
+			try
+			{
+				string cls;
+				Helper.checkType(l, 1, out cls);
+				Type t = LuaObject.FindType(cls);
+				if (t == null)
+				{
+					return Helper.error(l, "Can't find {0} to create", cls);
+				}
+
+				LuaClassObject co = new LuaClassObject(t);
+				LuaObject.pushObject(l,co);
+				Helper.pushValue(l, true);
+				return 2;
+			}
+			catch (Exception e)
+			{
+				return Helper.error(l, e);
+			}
+		}
         /// <summary>
         /// same as SLua default import
         /// </summary>
         /// <param name="luastate"></param>
         /// <returns></returns>
-        [MonoPInvokeCallback(typeof(LuaCSFunction))]
+        [LuaInterface.MonoPInvokeCallback(typeof(LuaCSFunction))]
         private int LuaUsing(IntPtr l)
         {
             try
@@ -313,7 +371,7 @@ namespace KSFramework
                 return LuaObject.error(l, e);
             }
         }
-
+        
         /// <summary>
         /// This will override SLua default `import`
         /// 
@@ -321,7 +379,7 @@ namespace KSFramework
         /// </summary>
         /// <param name="l"></param>
         /// <returns></returns>
-        [MonoPInvokeCallback(typeof(LuaCSFunction))]
+        [LuaInterface.MonoPInvokeCallback(typeof(LuaCSFunction))]
         internal static int LuaImport(IntPtr L)
         {
             LuaModule luaModule = Instance;
@@ -329,11 +387,13 @@ namespace KSFramework
             string fileName = LuaDLL.lua_tostring(L, 1);
             var obj = luaModule.Import(fileName);
 
+
             LuaObject.pushValue(L, obj);
             LuaObject.pushValue(L, true);
             return 2;
 
         }
+#endif
 
     }
 
