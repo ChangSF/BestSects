@@ -7,6 +7,7 @@ using BestSects.protocol;
 
 namespace BestSects.Net
 {
+    
     public enum MessageID : short
     {
         //本地消息

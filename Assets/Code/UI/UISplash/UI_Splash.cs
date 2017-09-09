@@ -18,9 +18,11 @@ public class UI_Splash : UIController
     float currentProgress;
     Tweener tweener;
     bool bGetServerList = false;
+    bool bGameStart = false;
     // Use this for initialization
     void Start()
     {
+        Messenger.AddListener(GameDefine.MessageId_Local.GameStart.ToString(), () => { bGameStart = true; });
         currentProgress = 0f;
         slider.value = 0f;
         tweener = slider.DOValue(currentProgress, 0.5f);
@@ -31,13 +33,18 @@ public class UI_Splash : UIController
     // Update is called once per frame
     void Update()
     {
-        progress.text = Game.Instance.LuaModule.InitProgress.ToString();
-        currentProgress = (float)Game.Instance.LuaModule.InitProgress / 100f;
-        tweener.ChangeStartValue(slider.value).ChangeEndValue(currentProgress, 0.5f).PlayForward();
-        if (Game.Instance.LuaModule.InitProgress >= 100 && bGetServerList)
+        //progress.text = Game.Instance.LuaModule.InitProgress.ToString();
+        //currentProgress = (float)Game.Instance.LuaModule.InitProgress / 100f;
+        //tweener.ChangeStartValue(slider.value).ChangeEndValue(currentProgress, 0.5f).PlayForward();
+        if (Game.Instance.LuaModule.InitProgress >= 1 && bGetServerList && bGameStart)
         {
             UIModule.Instance.OpenWindow(wndName, args);
             Destroy(gameObject);
+        }
+        else if (bGetServerList || bGameStart)
+        {
+            currentProgress = 50f;
+            tweener.ChangeStartValue(slider.value).ChangeEndValue(currentProgress, 0.5f).PlayForward();
         }
     }
 

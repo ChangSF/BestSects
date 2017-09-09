@@ -6,30 +6,30 @@
 
 --import("mobdebug").start();
 -- simple class extends
-function extends(class, base)
-    base.__index = base
-    setmetatable(class, base)
-end
+-- function extends(class, base)
+--     base.__index = base
+--     setmetatable(class, base)
+-- end
 
--- foreach C# ienumerable
-function foreach(csharp_ienumerable)
-    return Slua.iter(csharp_ienumerable)
-end
+-- -- foreach C# ienumerable
+-- function foreach(csharp_ienumerable)
+--     return Slua.iter(csharp_ienumerable)
+-- end
 
--- simple new table to a object
-function new(table, ctorFunc)
-    assert(table ~= nil)
+-- -- simple new table to a object
+-- function new(table, ctorFunc)
+--     assert(table ~= nil)
 
-    table.__index = table
+--     table.__index = table
 
-    local tb = {}
-    setmetatable(tb, table)
+--     local tb = {}
+--     setmetatable(tb, table)
 
-    if ctorFunc then
-        ctorFunc(tb)
-    end
+--     if ctorFunc then
+--         ctorFunc(tb)
+--     end
 
-    return tb
-end
+--     return tb
+-- end
 
 print("Init.lua script finish!")

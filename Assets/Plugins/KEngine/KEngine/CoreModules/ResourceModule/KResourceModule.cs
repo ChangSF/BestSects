@@ -295,7 +295,10 @@ namespace KEngine
             if (!Application.isEditor && Application.platform == RuntimePlatform.Android)
             {
                 if (!KEngineAndroidPlugin.IsAssetExists(BundlesPathRelative + url))
+                {
+                    Debug.LogError("TryGetInAppStreamingUrl => " + BundlesPathRelative + url);
                     return false;
+                }
             }
             else
             {
@@ -356,7 +359,6 @@ namespace KEngine
             {
                 return true;
             }
-
             return false;
         }
 
@@ -587,7 +589,7 @@ namespace KEngine
                 GameObject.DontDestroyOnLoad(resMgr);
             }
 
-            _Instance = resMgr.AddComponent<KResourceModule>();
+            
 
             string editorProductPath = EditorProductFullPath;
 
@@ -647,6 +649,7 @@ namespace KEngine
                     }
                     break;
             }
+            _Instance = resMgr.AddComponent<KResourceModule>();
         }
 
         public static void LogRequest(string resType, string resPath)

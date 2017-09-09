@@ -119,8 +119,8 @@ namespace KEngine.Editor
         /// <returns></returns>
         private static string PerformBuild(string outputpath, BuildTarget tag, BuildOptions opt)
         {
-            EditorUserBuildSettings.SwitchActiveBuildTarget(tag);
-
+            //EditorUserBuildSettings.SwitchActiveBuildTarget(tag);
+            EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, BuildTarget.Android);
             ParseArgs(ref opt, ref outputpath);
 
             string fullPath = System.IO.Path.Combine(KEngine.AppEngine.GetConfig("KEngine", "ProductRelPath"), outputpath);

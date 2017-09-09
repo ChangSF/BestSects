@@ -83,6 +83,9 @@ public class Game : KSGame
 
         // 开始加载我们的公告界面！
         //UIModule.Instance.OpenWindow("Billboard");
+        // 测试Collect函数，立即回收所有资源
+        KResourceModule.Collect();
+        Messenger.Broadcast(GameDefine.MessageId_Local.GameStart.ToString());
     }
 
 }
