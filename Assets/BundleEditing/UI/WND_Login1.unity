@@ -491,7 +491,7 @@ GameObject:
   - component: {fileID: 77905514}
   - component: {fileID: 77905513}
   m_Layer: 5
-  m_Name: btnSignin
+  m_Name: btnSignIn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1819,7 +1819,7 @@ GameObject:
   - component: {fileID: 556623745}
   - component: {fileID: 556623744}
   m_Layer: 5
-  m_Name: imgGroupHaveLogin
+  m_Name: imgGroupHaveLogined
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1890,7 +1890,7 @@ GameObject:
   - component: {fileID: 576446948}
   - component: {fileID: 576446947}
   m_Layer: 5
-  m_Name: imgGroupLogin
+  m_Name: imgGroupRegister
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3094,18 +3094,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 919090498}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c177bb9e14b05ad4595e058835231885, type: 3}
+  m_Script: {fileID: 11500000, guid: 8984fc3871c2d5e4c89b2f464e0ba6bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   UITemplateName: 
   UIName: 
   useLuaFirst: 1
-  btnLogin: {fileID: 68184084}
-  btnForgetPwd: {fileID: 27222777}
-  btnRegister: {fileID: 665806158}
-  objLogen: {fileID: 1585420038}
-  objServers: {fileID: 1559366894}
-  objRegister: {fileID: 1989298243}
 --- !u!1 &957029238
 GameObject:
   m_ObjectHideFlags: 0
@@ -3959,7 +3953,7 @@ GameObject:
   - component: {fileID: 1495172135}
   - component: {fileID: 1495172134}
   m_Layer: 5
-  m_Name: btnSignup
+  m_Name: btnSignUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4237,7 +4231,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 83.600006, y: 40.999992}
+  m_AnchoredPosition: {x: 83.600006, y: 41}
   m_SizeDelta: {x: 167.2, y: 62.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1553493604

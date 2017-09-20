@@ -337,7 +337,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UITemplateName: 
   UIName: 
-  wndName: WND_Login
+  wndName: WND_Login1
   args: 12345
   bg: {fileID: 1429656767}
   progress: {fileID: 1006830336}
