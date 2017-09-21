@@ -12,7 +12,7 @@ public class UI_Login1 : CSUIController
 {
     private Button btnRegister, btnLogin, btnForgetPwd, btnSignIn, btnSignUP;
     private Canvas objRegister, objLogin, objServers;
-    private InputField inputID, inputPassword;
+    private InputField inputID, inputPassword, inputRegID,inputRegPwd,inputRegPwdAgain;
 
     private JsonData token;
     private string username,password;
@@ -35,7 +35,10 @@ public class UI_Login1 : CSUIController
         public string uid;
     }
     private bool bGetServerList = false;
-    private List<GameObject> serverlistGOs;
+    private List<GameObject> serverlistGOs=new List<GameObject>();
+    private GameObject togExampleServer;
+    private Transform serverContent;
+    private int selectedIndex = 1;
 
 
 
@@ -51,8 +54,16 @@ public class UI_Login1 : CSUIController
         objRegister = transform.Find("imgBackground/objRegister").GetComponent<Canvas>();
         objLogin = transform.Find("imgBackground/objLogin").GetComponent<Canvas>();
         objServers = transform.Find("imgBackground/objServers").GetComponent<Canvas>();
-        inputID= transform.Find("imgBackground/objLogin/imgGroupLogin").GetComponent<InputField>();
-        inputPassword= transform.Find("imgBackground/objLogin/imgGroupLogin").GetComponent<InputField>();
+        inputID= transform.Find("imgBackground/objLogin/imgGroupLogin/inputID").GetComponent<InputField>();
+        inputPassword= transform.Find("imgBackground/objLogin/imgGroupLogin/inputPassword").GetComponent<InputField>();
+        inputRegID = transform.Find("imgBackground/objRegister/imgGroupRegister/inputRegID").GetComponent<InputField>();
+        inputRegPwd = transform.Find("imgBackground/objRegister/imgGroupRegister/inputRegPwd").GetComponent<InputField>();
+        inputRegPwdAgain = transform.Find("imgBackground/objRegister/imgGroupRegister/inputRegPwdAgain").GetComponent<InputField>();
+
+
+
+
+        togExampleServer = transform.Find("imgBackground/objServers/togExampleServer").GetComponent<Toggle>().gameObject;
 
         btnForgetPwd.onClick.RemoveAllListeners();
         btnForgetPwd.onClick.AddListener(ForgetPwd);
@@ -71,6 +82,9 @@ public class UI_Login1 : CSUIController
 
         });
 
+        btnSignIn.onClick.RemoveAllListeners();
+        btnSignIn.onClick.AddListener(Reg_LoginServer);
+
 
         btnSignUP.onClick.RemoveAllListeners();
         btnSignUP.onClick.AddListener(ConnectServer);
@@ -80,6 +94,7 @@ public class UI_Login1 : CSUIController
 
     public override void OnOpen(params object[] args)
     {
+      
         Debug.LogError(GetType().ToString() + ":OnOpen");
         Debug.LogError("================================ WND_Login:OnOpen ============================");
         Messenger.AddListener("NetworkConnect", () =>
@@ -119,7 +134,7 @@ public class UI_Login1 : CSUIController
         List<string> gameServerList = new List<string>();
         JsonData serverListData = data["game"];
         int x = serverListData.Count;
-        serverlist.Clear();
+        serverlist = new List<Serverlist>();
 
         for (int i=0;i<x; i++)
         {
@@ -144,14 +159,13 @@ public class UI_Login1 : CSUIController
     }
 
 
-    public void Login_LoginServer()
+    private void Login_LoginServer()
     {
         if (inputID.text == "" || inputPassword.text=="")
         {
             StartCoroutine(Routine_i());
         }
     }
-
     private IEnumerator Routine_i()
     {
         string l_username = inputID.text;
@@ -173,12 +187,46 @@ public class UI_Login1 : CSUIController
         }
         else
         {
-            Debug.LogError(www.error);
+            Debug.LogError("网络出错,无法访问登录服务器!");
         }
     }
 
+    private void Reg_LoginServer()
+    {
+        string account = inputRegID.text;
+        string pwd = inputRegPwd.text;
+        string pwdAgain = inputRegPwdAgain.text;
+        if (pwd != pwdAgain)
+        {
+            Debug.LogError("两次输入不一致！");
+            return;
+        }
+        StartCoroutine(Routine_j());
+    }
+    private IEnumerator Routine_j()
+    {
+        string l_username = inputRegID.text;
+        string l_password = inputRegPwd.text;
 
+        string url = "http://" + loginServer["ip"] + ":" + loginServer["port"] + "/rEgIsTER?USerNAmE=" + l_username + "&PAsSWoRD=" + l_password;
 
+        Debug.LogError(url);
+        WWW www = new WWW(url);
+
+        yield return www;
+        Debug.LogError(www.text);
+        if (www.error == null || www.error == "")
+        {
+            username = l_username;
+            password = l_password;
+            ProcessLoginServerData(www.text);
+
+        }
+        else
+        {
+            Debug.LogError(www.error);
+        }
+    }
     private void ProcessLoginServerData(string jsonText)
     {
         JsonReader reader = new JsonReader(jsonText);
@@ -188,7 +236,8 @@ public class UI_Login1 : CSUIController
         if (code.ToInt32() == 0)
         {
             JsonData roles = data["roles"];
-            this.roles.Clear();
+            this.roles = new List<Roles>();
+
             int x = roles.Count;
             for(int i = 0; i < x; i++)
             {
@@ -216,13 +265,66 @@ public class UI_Login1 : CSUIController
 
     private void InitServerList()
     {
-        foreach (Serverlist k in serverlist)
+        int x = serverlist.Count;
+        int y = serverlistGOs.Count;
+        
+        for (int i=0;i<Mathf.Max(x,y);i++)
         {
+            if (i > x-1){
+               serverlistGOs[i].SetActive(false) ;
+               
+            }
+            else if (i > y - 1)
+            {
+            
+                GameObject j= Instantiate(togExampleServer,serverContent);
+                serverlistGOs.Insert(i, j);
+
+            }
+            else
+            {
+                InitServerItem(serverlistGOs[i], serverlist[i]);
+            }
+
+           
+
+
 
         }
+        if (serverlistGOs.Count > 0)
+        {
+            serverlistGOs[0].GetComponent<Toggle>().isOn=true;
+        }
+
     }
 
+    private void InitServerItem(GameObject argA,Serverlist argB)
+    {
+        argA.SetActive(true);
+        argA.name = argB.server;
+        Text serverNum = argA.transform.Find("imgNumBox/imgMsgBox/labServerNum").GetComponent<Text>();
+        Text serverName = argA.transform.Find("imgNumBox/labServerName").GetComponent<Text>();
+        Image serverState = argA.transform.Find("imgNumBox/imgServerState").GetComponent<Image>();
+        serverName.text = argB.name;
+        serverNum.text = argB.server;
+        serverState.enabled = false;
+        Toggle l_toggle = argA.GetComponent<Toggle>();
+        l_toggle.onValueChanged.RemoveAllListeners();
+        int index = argA.name.ToInt32();
 
+        l_toggle.onValueChanged.AddListener((bool isON) =>
+        {
+            if (isON)
+            {
+                selectedIndex = index;
+                Debug.LogError("选择了=> "+index.ToString());
+            }
+
+        });
+
+
+
+    }
 
     private void ForgetPwd()
     {
@@ -247,7 +349,7 @@ public class UI_Login1 : CSUIController
         objLogin.enabled = false;
         objRegister.enabled = true;
         objServers.enabled = false;
-
+        
     }
 
     private void ConnectServer()
