@@ -173,7 +173,7 @@ public class UI_Login1 : CSUIController
         }
         else
         {
-            Debug.LogError(www.error);
+            Debug.LogError("网络出错,无法访问登录服务器!");
         }
     }
 
