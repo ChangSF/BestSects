@@ -14,8 +14,8 @@ public class UI_Login1 : CSUIController
     private Canvas objRegister, objLogin, objServers;
     private InputField inputID, inputPassword;
 
-    private string token;
-    private string username;
+    private JsonData token;
+    private string username,password;
     private Dictionary<string,string> loginServer;
     private List<Serverlist> serverlist;
     private struct Serverlist {
@@ -25,8 +25,17 @@ public class UI_Login1 : CSUIController
         public string name;
 
     }
+    private List<Roles> roles;
+    private struct Roles
+    {
+        public  string level;
+        public string nickname;
+        public string serverID;
+        public string sex;
+        public string uid;
+    }
     private bool bGetServerList = false;
-
+    private List<GameObject> serverlistGOs;
 
 
 
@@ -61,6 +70,12 @@ public class UI_Login1 : CSUIController
             Login_LoginServer();
 
         });
+
+
+        btnSignUP.onClick.RemoveAllListeners();
+        btnSignUP.onClick.AddListener(ConnectServer);
+
+
     }
 
     public override void OnOpen(params object[] args)
@@ -103,11 +118,8 @@ public class UI_Login1 : CSUIController
 
         List<string> gameServerList = new List<string>();
         JsonData serverListData = data["game"];
-        int x;
-        if (!int.TryParse(serverListData["Count"].ToString(),out x))
-        {
-            x = 0;
-        }
+        int x = serverListData.Count;
+        serverlist.Clear();
 
         for (int i=0;i<x; i++)
         {
@@ -136,27 +148,92 @@ public class UI_Login1 : CSUIController
     {
         if (inputID.text == "" || inputPassword.text=="")
         {
+            StartCoroutine(Routine_i());
+        }
+    }
 
+    private IEnumerator Routine_i()
+    {
+        string l_username = inputID.text;
+        string l_password = inputPassword.text;
 
+        string url = "http://" + loginServer["ip"] + ":" + loginServer["port"] + "/loGIN?UsERnaME=" + l_username + "&pASsWOrD=" + l_password;
+
+        Debug.LogError(url);
+        WWW www = new WWW(url);
+
+        yield return www;
+        Debug.LogError(www.text);
+        if( www.error == null || www.error == "")
+        {
+            username = l_username;
+            password = l_password;
+            ProcessLoginServerData(www.text);
 
         }
-
-
+        else
+        {
+            Debug.LogError(www.error);
+        }
     }
 
 
 
+    private void ProcessLoginServerData(string jsonText)
+    {
+        JsonReader reader = new JsonReader(jsonText);
+        JsonData data = new JsonData();
+        data = JsonMapper.ToObject(reader);
+        string code = data["code"].ToString();
+        if (code.ToInt32() == 0)
+        {
+            JsonData roles = data["roles"];
+            this.roles.Clear();
+            int x = roles.Count;
+            for(int i = 0; i < x; i++)
+            {
+                Roles j = new Roles();
+                j.level = data["level"].ToString();
+                j.nickname = data["nickname"].ToString();
+                j.serverID = data["serverID"].ToString();
+                j.sex = data["sex"].ToString();
+                j.uid = data["uid"].ToString();
+                this.roles.Insert(i, j);
+            }
+            token = data["token"];
+            Cookie.Set("token",token);
+            Cookie.Set("roles",this.roles);
+            objLogin.enabled = false;
+            objServers.enabled = true;
+            objRegister.enabled = false;
+            InitServerList();
+        }
+        else
+        {
+            Debug.LogError("error code =>"+code);
+        }
+    }
 
-    public void ForgetPwd()
+    private void InitServerList()
+    {
+        foreach (Serverlist k in serverlist)
+        {
+
+        }
+    }
+
+
+
+    private void ForgetPwd()
     {
 
 
     }
-    public void LoginServer()
+    private void LoginServer()
     {
         ReqLoginMessage msg = new ReqLoginMessage();
         Debug.LogError("z => " + token);
-        msg.Token = token;
+        msg.Token = token.ToString();
         msg.Username = this.username;
         msg.Channel = 0; //玩家渠道
         msg.DeviceId = "abcdef"; //设备号
@@ -165,7 +242,7 @@ public class UI_Login1 : CSUIController
 
     }
 
-    public void ToRegisterStep()
+    private void ToRegisterStep()
     {
         objLogin.enabled = false;
         objRegister.enabled = true;
@@ -173,7 +250,10 @@ public class UI_Login1 : CSUIController
 
     }
 
-
+    private void ConnectServer()
+    {
+       // NetworkModule.Instance.Connect(ip,port);
+    }
 }
 
 
