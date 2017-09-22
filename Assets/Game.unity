@@ -343,7 +343,7 @@ MonoBehaviour:
   progress: {fileID: 1006830336}
   slider: {fileID: 1555173806}
   tips: {fileID: 1018272916}
-  url: http://47.94.220.1/serverlist1.html
+  url: http://47.94.220.1/serverlist.html
 --- !u!114 &939895866
 MonoBehaviour:
   m_ObjectHideFlags: 0
