@@ -13,6 +13,7 @@ public class UI_Login1 : CSUIController
     private Button btnRegister, btnLogin, btnForgetPwd, btnSignIn, btnSignUP;
     private Canvas objRegister, objLogin, objServers;
     private InputField inputID, inputPassword, inputRegID,inputRegPwd,inputRegPwdAgain;
+    private ToggleGroup toggleGroupRegister;
 
     private JsonData token;
     private string username,password;
@@ -37,7 +38,7 @@ public class UI_Login1 : CSUIController
     private bool bGetServerList = false;
     private List<GameObject> serverlistGOs=new List<GameObject>();
     private GameObject togExampleServer;
-    private Transform serverContent;
+  //  private Transform serverContent;
     private int selectedIndex = 1;
 
 
@@ -59,6 +60,9 @@ public class UI_Login1 : CSUIController
         inputRegID = transform.Find("imgBackground/objRegister/imgGroupRegister/inputRegID").GetComponent<InputField>();
         inputRegPwd = transform.Find("imgBackground/objRegister/imgGroupRegister/inputRegPwd").GetComponent<InputField>();
         inputRegPwdAgain = transform.Find("imgBackground/objRegister/imgGroupRegister/inputRegPwdAgain").GetComponent<InputField>();
+
+
+        toggleGroupRegister = transform.Find("imgBackground/objRegister/imgGroupRegister/ScrollView/Viewport/Content").GetComponent<ToggleGroup>();
 
 
 
@@ -276,9 +280,11 @@ public class UI_Login1 : CSUIController
             }
             else if (i > y - 1)
             {
-            
-                GameObject j= Instantiate(togExampleServer,serverContent);
+
+                GameObject j = Instantiate<GameObject>(togExampleServer,toggleGroupRegister.transform);
+                
                 serverlistGOs.Insert(i, j);
+
 
             }
             else
