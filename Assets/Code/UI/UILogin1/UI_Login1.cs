@@ -62,7 +62,7 @@ public class UI_Login1 : CSUIController
         inputRegPwdAgain = transform.Find("imgBackground/objRegister/imgGroupRegister/inputRegPwdAgain").GetComponent<InputField>();
 
 
-        toggleGroupRegister = transform.Find("imgBackground/objRegister/imgGroupRegister/ScrollView/Viewport/Content").GetComponent<ToggleGroup>();
+        toggleGroupRegister = transform.Find("imgBackground/objServers/imgGroupRegister/ScrollView/Viewport/Content").GetComponent<ToggleGroup>();
 
 
 
@@ -281,10 +281,10 @@ public class UI_Login1 : CSUIController
             else if (i > y - 1)
             {
 
-                GameObject j = Instantiate<GameObject>(togExampleServer,toggleGroupRegister.transform);
+                GameObject j = Instantiate(togExampleServer,toggleGroupRegister.transform);
                 
-                serverlistGOs.Insert(i, j);
-
+                serverlistGOs.Insert(i, j); 
+                InitServerItem(serverlistGOs[i], serverlist[i]);
 
             }
             else
@@ -324,6 +324,7 @@ public class UI_Login1 : CSUIController
             {
                 selectedIndex = index;
                 Debug.LogError("选择了=> "+index.ToString());
+
             }
 
         });
@@ -360,7 +361,7 @@ public class UI_Login1 : CSUIController
 
     private void ConnectServer()
     {
-       // NetworkModule.Instance.Connect(ip,port);
+       NetworkModule.Instance.Connect(serverlist[selectedIndex].ip, serverlist[selectedIndex].port.ToInt32());
     }
 }
 
