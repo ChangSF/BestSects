@@ -14,7 +14,7 @@ public class UI_Login1 : CSUIController
     private Canvas objRegister, objLogin, objServers;
     private InputField inputID, inputPassword, inputRegID,inputRegPwd,inputRegPwdAgain;
     private ToggleGroup toggleGroupRegister;
-
+    private Text labBtmServer;
     private JsonData token;
     private string username,password;
     private Dictionary<string,string> loginServer;
@@ -39,7 +39,7 @@ public class UI_Login1 : CSUIController
     private List<GameObject> serverlistGOs=new List<GameObject>();
     private GameObject togExampleServer;
   //  private Transform serverContent;
-    private int selectedIndex = 1;
+    private int selectedIndex = 0;
 
 
 
@@ -60,7 +60,7 @@ public class UI_Login1 : CSUIController
         inputRegID = transform.Find("imgBackground/objRegister/imgGroupRegister/inputRegID").GetComponent<InputField>();
         inputRegPwd = transform.Find("imgBackground/objRegister/imgGroupRegister/inputRegPwd").GetComponent<InputField>();
         inputRegPwdAgain = transform.Find("imgBackground/objRegister/imgGroupRegister/inputRegPwdAgain").GetComponent<InputField>();
-
+        labBtmServer= transform.Find("imgBackground/objServers/txtBeChosen/labBtmServer").GetComponent<Text>();
 
         toggleGroupRegister = transform.Find("imgBackground/objServers/imgGroupRegister/ScrollView/Viewport/Content").GetComponent<ToggleGroup>();
 
@@ -80,8 +80,10 @@ public class UI_Login1 : CSUIController
         {
             if (!bGetServerList)
             {
+                Debug.LogError("Serverlist is not available");
                 return;
             }
+            Debug.LogError("logining");
             Login_LoginServer();
 
         });
@@ -167,8 +169,9 @@ public class UI_Login1 : CSUIController
     {
         if (inputID.text == "" || inputPassword.text=="")
         {
-            StartCoroutine(Routine_i());
+            return;
         }
+        StartCoroutine(Routine_i());
     }
     private IEnumerator Routine_i()
     {
@@ -246,11 +249,11 @@ public class UI_Login1 : CSUIController
             for(int i = 0; i < x; i++)
             {
                 Roles j = new Roles();
-                j.level = data["level"].ToString();
-                j.nickname = data["nickname"].ToString();
-                j.serverID = data["serverID"].ToString();
-                j.sex = data["sex"].ToString();
-                j.uid = data["uid"].ToString();
+                j.level = roles[i]["level"].ToString();
+                j.nickname = roles[i]["nickname"].ToString();
+                j.serverID = roles[i]["serverID"].ToString();
+                j.sex = roles[i]["sex"].ToString();
+                j.uid = roles[i]["uid"].ToString();
                 this.roles.Insert(i, j);
             }
             token = data["token"];
@@ -278,17 +281,16 @@ public class UI_Login1 : CSUIController
                serverlistGOs[i].SetActive(false) ;
                
             }
-            else if (i > y - 1)
+            else 
             {
+                if (i > y - 1)
+                {
+                    GameObject j = Instantiate(togExampleServer, toggleGroupRegister.transform);
 
-                GameObject j = Instantiate(togExampleServer,toggleGroupRegister.transform);
-                
-                serverlistGOs.Insert(i, j); 
-                InitServerItem(serverlistGOs[i], serverlist[i]);
-
-            }
-            else
-            {
+                    serverlistGOs.Insert(i, j);
+                }
+              
+              
                 InitServerItem(serverlistGOs[i], serverlist[i]);
             }
 
@@ -312,7 +314,7 @@ public class UI_Login1 : CSUIController
         Text serverName = argA.transform.Find("imgNumBox/labServerName").GetComponent<Text>();
         Image serverState = argA.transform.Find("imgNumBox/imgServerState").GetComponent<Image>();
         serverName.text = argB.name;
-        serverNum.text = argB.server;
+        serverNum.text = argB.server+"区";
         serverState.enabled = false;
         Toggle l_toggle = argA.GetComponent<Toggle>();
         l_toggle.onValueChanged.RemoveAllListeners();
@@ -322,9 +324,9 @@ public class UI_Login1 : CSUIController
         {
             if (isON)
             {
-                selectedIndex = index;
+                selectedIndex = index-1;
                 Debug.LogError("选择了=> "+index.ToString());
-
+                labBtmServer.text = index.ToString() + "区  " +argB.name;
             }
 
         });
@@ -367,15 +369,4 @@ public class UI_Login1 : CSUIController
 
 
 
-
-
-//function WND_Login:LoginServer()
-//    local msg = ReqLoginMessage();
-//Log.Error("z =>"..tostring(self.token));
-//    msg.Token =tostring(self.token);--登录令牌
-//    msg.Username = self.username;--帐号
-//    msg.Channel = 0;--玩家渠道
-//    msg.DeviceId = "abcdef";--设备号
-//    NetworkModule.Instance:Send(MessageID.ReqLogin, msg);
-//end
 
