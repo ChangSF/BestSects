@@ -27,7 +27,7 @@ public class UIManager
     }
     public void RegAllUIMessage()
     {
-        UILogic<UI_LoginWnd>.Instance.Init();
+        UILogic<UI_Login>.Instance.Init();
     }
 
 }

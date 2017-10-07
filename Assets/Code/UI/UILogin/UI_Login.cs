@@ -8,7 +8,7 @@ using BestSects.protocol;
 using BestSects.Net;
 using KEngine.UI;
 
-public class UI_Login1 : CSUIController
+public class UI_Login : CSUIController
 {
     private Button btnRegister, btnLogin, btnForgetPwd, btnSignIn, btnSignUP;
     private Canvas objRegister, objLogin, objServers;
@@ -45,7 +45,7 @@ public class UI_Login1 : CSUIController
 
     public override void OnInit()
     {
-     UILogic<UI_Login1>.Instance.UIReg(this);
+     UILogic<UI_Login>.Instance.UIReg(this);
         Debug.LogError(GetType().ToString() + ":OnInit");
         btnRegister = transform.Find("imgBackground/objLogin/imgGroupRegister/btnRegister").GetComponent<Button>();
         btnLogin = transform.Find("imgBackground/objLogin/imgGroupLogin/btnLogin").GetComponent<Button>();
@@ -160,7 +160,7 @@ public class UI_Login1 : CSUIController
 
     public override void OnClose()
     {
-        UILogic<UI_Login1>.Instance.UIUnReg();
+        UILogic<UI_Login>.Instance.UIUnReg();
         Debug.LogError(GetType().ToString() + ":OnClose");
     }
 
